@@ -28,6 +28,6 @@ jobs:
         destination: reports
     - store_test_results:
         path: app/build/test_results
-  notify:
-    webhooks:
-      - url: https://hooks.slack.com/services/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
+notify:
+  webhooks:
+    - url: https://hooks.slack.com/services/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
