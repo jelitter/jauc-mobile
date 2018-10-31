@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "491744035196",
+    "firebase_url": "https://jauc-ae38e.firebaseio.com",
+    "project_id": "jauc-ae38e",
+    "storage_bucket": "jauc-ae38e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491744035196:android:b16a4fe2afe244ff",
+        "android_client_info": {
+          "package_name": "cit.jauc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491744035196-fb1bt8ac3b9o669bserbus7gjcf9d73e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cit.jauc",
+            "certificate_hash": "1fabdde67065fe47fd108ce1a25b916f6b9567e7"
+          }
+        },
+        {
+          "client_id": "491744035196-3tvo0r4d05b1mq7m16s9597f7tsceggf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwO9mfb-UxujWiTlSWACjJhtuHBsbRhnQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491744035196-3tvo0r4d05b1mq7m16s9597f7tsceggf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
