@@ -9,7 +9,8 @@
   android:paddingRight="@dimen/activity_horizontal_margin"
   android:gravity="center_horizontal"
   android:orientation="vertical"
-  tools:context=".LoginActivity">
+  tools:context=".LoginActivity"
+  android:id="@+id/login_activity">
 
   <!-- Login progress -->
   <ProgressBar
@@ -72,6 +73,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/action_sign_in"/>
+
+      <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
 
     </LinearLayout>
   </ScrollView>
