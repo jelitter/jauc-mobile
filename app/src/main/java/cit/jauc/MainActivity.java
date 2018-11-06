@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendToLogin() { //funtion
-        GoogleSignInClient mGoogleSignInClient ;
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInClient mGoogleSignInClient;
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -81,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Intent setupIntent = new Intent(getBaseContext(), LoginActivity.class);
-                        Toast.makeText(getBaseContext(), "Logged Out", Toast.LENGTH_LONG).show(); //if u want to show some text
+                        Toast.makeText(getBaseContext(), "Logged Out", Toast.LENGTH_LONG)
+                                .show(); //if u want to show some text
                         setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(setupIntent);
                         finish();
