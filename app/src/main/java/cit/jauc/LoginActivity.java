@@ -45,9 +45,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
         Twitter.initialize(this);
+
+        setContentView(R.layout.activity_login);
 
         googleButton = findViewById(R.id.googleBtn);
         twitterButton = findViewById(R.id.twitterBtn);
