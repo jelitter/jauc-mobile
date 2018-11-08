@@ -69,6 +69,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void failure(TwitterException exception) {
                 Log.w(TAG, "twitterLogin:failure", exception);
+                Toast.makeText(LoginActivity.this, "Unable to launch authentication.",
+                        Toast.LENGTH_SHORT).show();
                 updateUI(null);
             }
         });
