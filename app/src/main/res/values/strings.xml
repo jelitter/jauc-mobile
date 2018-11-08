@@ -14,4 +14,6 @@
     completions."
   </string>
   <string name="title_activity_main">MainActivity</string>
+  <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">5ERcxyb564xBJ6l7LjkO6Vu6z</string>
+  <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
 </resources>
