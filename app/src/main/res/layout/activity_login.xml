@@ -24,7 +24,9 @@
   <ScrollView
     android:id="@+id/login_form"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
     <LinearLayout
       android:id="@+id/email_login_form"
@@ -78,6 +80,11 @@
         android:id="@+id/googleBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
+
+      <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/twitterBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     </LinearLayout>
   </ScrollView>
