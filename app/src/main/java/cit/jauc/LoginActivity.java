@@ -37,19 +37,15 @@ import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "GoogleLogin";
+    private final static int RC_SIGN_IN = 2;
     private SignInButton googleButton;
     private TwitterLoginButton twitterButton;
     private LoginButton facebookButton;
-
     private FirebaseAuth mAuth;
-    private final static int RC_SIGN_IN = 2;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private CallbackManager mCallbackManager;
