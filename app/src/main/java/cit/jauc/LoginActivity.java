@@ -33,7 +33,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "GoogleLogin";
+    private static final String TAG = "LoginActivity";
     SignInButton googleButton;
     private TwitterLoginButton twitterButton;
 
