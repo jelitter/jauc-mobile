@@ -227,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startMaps() {
-        Toast.makeText(MainActivity.this, "MAPS OK", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(getBaseContext(), MapActivity.class);
+        startActivity(i);
     }
 }
