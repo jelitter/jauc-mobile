@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -49,6 +51,9 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private CallbackManager mCallbackManager;
+    private EditText email;
+    private EditText password;
+    private Button emailLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,10 @@ public class LoginActivity extends AppCompatActivity {
         googleButton = findViewById(R.id.googleBtn);
         twitterButton = findViewById(R.id.twitterBtn);
         facebookButton = findViewById(R.id.facebookBtn);
+
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        emailLoginButton = findViewById(R.id.email_sign_in_button);
 
         // Google Login Button Listener
         googleButton.setOnClickListener(new OnClickListener() {
@@ -131,14 +140,48 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Initialize Email and Password Auth
+        emailLoginButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String emailString = email.getText().toString();
+                String pwd = password.getText().toString();
+
+                if(!emailString.equals("") && !pwd.equals("")){
+                    mAuth.signInWithEmailAndPassword(emailString, pwd)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        Toast.makeText(LoginActivity.this, "Failed sign in", Toast.LENGTH_LONG)
+                                        .show();
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Signed in", Toast.LENGTH_LONG)
+                                                .show();
+                                    }
+                                }
+                            });
+                }
+            }
+
+        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
         mAuth.addAuthStateListener(mAuthListener);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
 
     private void updateUI(FirebaseUser currentUser) {
 
