@@ -1,46 +1,71 @@
-package cit.jauc;
+package cit.jauc.ui;
 
-import static cit.jauc.Constants.ERROR_DIALOG_REQUEST;
-import static cit.jauc.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
-import static cit.jauc.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
-
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
+import cit.jauc.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-    private static final String TAG = "Main Screen";
-    Button button;
-    FirebaseAuth mAuth;
-    FirebaseAuth.AuthStateListener mAuthListener;
+import javax.annotation.Nullable;
+
+import static cit.jauc.Constants.ERROR_DIALOG_REQUEST;
+
+
+public class MainActivity extends AppCompatActivity implements
+        View.OnClickListener,
+        ChatroomRecyclerAdapter.ChatroomRecyclerClickListener
+{
+
+    private static final String TAG = "MainActivity";
+
+
+
+    //widgets
+    private ProgressBar mProgressBar;
+    private Button button;
+
+
+    //vars
+    private FirebaseFirestore mDb;
     private boolean mLocationPermissionGranted = false;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
 
     @Override
     protected void onStart() {
@@ -49,21 +74,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (checkMapServices()) {
-            if (mLocationPermissionGranted) {
-                startMaps();
-            } else {
-                getLocationPermission();
-            }
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mProgressBar = findViewById(R.id.progressBar);
+
+        mDb = FirebaseFirestore.getInstance();
+
+        initSupportActionBar();
+
+                setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -95,7 +115,79 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
     }
+
+    private void initSupportActionBar(){
+        setTitle("TITLE");
+    }
+
+
+    @Override
+    public void onClick(View view) {
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+                if (checkMapServices()) {
+            if (mLocationPermissionGranted) {
+                startMaps();
+            } else {
+                getLocationPermission();
+            }
+        }
+    }
+
+
+    private void signOut(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_sign_out:{
+                signOut();
+                return true;
+            }
+            case R.id.action_profile:{
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            }
+            default:{
+                return super.onOptionsItemSelected(item);
+            }
+        }
+
+    }
+
+    private void showDialog(){
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideDialog(){
+        mProgressBar.setVisibility(View.GONE);
+    }
+
 
     private boolean checkMapServices() {
         if (isServicesOK()) {
@@ -230,4 +322,6 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(getBaseContext(), MapActivity.class);
         startActivity(i);
     }
+
+
 }
