@@ -51,9 +51,9 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private CallbackManager mCallbackManager;
-    private EditText email;
-    private EditText password;
-    private Button emailLoginButton;
+    private EditText login_et_email;
+    private EditText login_et_password;
+    private Button login_btn_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         twitterButton = findViewById(R.id.twitterBtn);
         facebookButton = findViewById(R.id.facebookBtn);
 
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        emailLoginButton = findViewById(R.id.email_sign_in_button);
+        login_et_email = findViewById(R.id.et_email);
+        login_et_password = findViewById(R.id.et_password);
+        login_btn_email = findViewById(R.id.email_sign_in_button);
 
         // Google Login Button Listener
         googleButton.setOnClickListener(new OnClickListener() {
@@ -142,14 +142,14 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Initialize Email and Password Auth
-        emailLoginButton.setOnClickListener(new View.OnClickListener(){
+        login_btn_email.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String emailString = email.getText().toString();
-                String pwd = password.getText().toString();
+                String login_email = login_et_email.getText().toString();
+                String login_password = login_et_password.getText().toString();
 
-                if(!emailString.equals("") && !pwd.equals("")){
-                    mAuth.signInWithEmailAndPassword(emailString, pwd)
+                if(!login_email.equals("") && !login_password.equals("")){
+                    mAuth.signInWithEmailAndPassword(login_email, login_password)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
