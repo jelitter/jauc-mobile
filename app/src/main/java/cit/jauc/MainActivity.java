@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
 public class MainActivity extends AppCompatActivity {
 
     Button button;
+    Button bt_book;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -56,6 +57,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 sendToLogin();
+            }
+        });
+
+        bt_book = findViewById(R.id.bt_book);
+        bt_book.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //start book_activity
+                Intent bookIntent = new Intent(MainActivity.this, Book_Activity.class);
+                startActivity(bookIntent);
             }
         });
 
