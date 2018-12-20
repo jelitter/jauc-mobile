@@ -1,17 +1,31 @@
 package cit.jauc;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.geocoder.GeocoderCriteria;
-import com.mapbox.geocoder.MapboxGeocoder;
-import com.mapbox.geocoder.android.AndroidGeocoder;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -20,10 +34,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
-import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineListener;
-import com.mapbox.android.core.location.LocationEngineProvider;
-
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,15 +47,16 @@ public class Book_Activity extends AppCompatActivity implements
     private PermissionsManager permissionsManager;
     private MapboxMap mapboxMap;
     private MapView mapView;
-    private EditText et_curentAddress;
+    private TextView tv_curentAddress;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Mapbox access token is configured here. This needs to be called either in your application
-        // object or in the same activity which contains the mapview.
+        // Mapbox access token is configured here.
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
 
         // This contains the MapView in XML and needs to be called after the access token is configured.
@@ -53,6 +65,53 @@ public class Book_Activity extends AppCompatActivity implements
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        tv_curentAddress = (TextView) findViewById(R.id.tv_currentAddress);
+
+
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.d("Location: ", location.toString());
+                Toast.makeText(getBaseContext(), "Location" + location.toString(), Toast.LENGTH_LONG)
+                        .show();
+
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                try {
+                    List<Address>  addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    if (addressList != null && addressList.size() > 0) {
+                        tv_curentAddress.setText(addressList.get(0).getAddressLine(0));
+                    } else {
+                        Toast.makeText(getBaseContext(), "Couldn't find an address", Toast.LENGTH_LONG);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+           // REQUEST PERMISSION
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
+        }
     }
 
     @Override
@@ -83,13 +142,13 @@ public class Book_Activity extends AppCompatActivity implements
             // Set the component's camera mode
             locationComponent.setCameraMode(CameraMode.TRACKING);
             locationComponent.setRenderMode(RenderMode.COMPASS);
+            CameraPosition position =  new CameraPosition.Builder()
+                    .zoom(16)
+                    .build();
+            mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 4000);
 
             //GeoCoder
-            et_curentAddress = (EditText)  findViewById(R.id.et_curentAddress);
 
-            // TODO
-            // 1. Reverse Geocode of user location
-            // 2. Show user current location on et_currentAddress
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
@@ -98,9 +157,17 @@ public class Book_Activity extends AppCompatActivity implements
 
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+            }
+        }
     }
 
     @Override
@@ -129,6 +196,7 @@ public class Book_Activity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+
     }
 
     @Override

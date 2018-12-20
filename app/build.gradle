@@ -30,6 +30,8 @@ android {
 //Mapbox required
 repositories {
     mavenCentral()
+    //Google Play Services
+    google()
 }
 
 dependencies {
@@ -46,6 +48,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.firebase:firebase-core:16.0.4'
+    // Google Play Services
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
     // Custom Auth
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
@@ -56,7 +60,5 @@ dependencies {
     implementation 'com.twitter.sdk.android:twitter-mopub:3.1.1'
     // Facebook API
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile ('com.mapbox.mapboxsdk:mapbox-android-geocoder:1.0.0@aar'){
-        transitive=true
-    }
+
 }
