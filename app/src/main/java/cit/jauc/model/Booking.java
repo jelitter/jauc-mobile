@@ -1,11 +1,16 @@
 package cit.jauc.model;
 
+import java.util.Date;
+
 public class Booking {
     private String carId;
     private Invoice invoice;
     private String userId;
     private Location origin;
     private Location destination;
+
+
+    private Date bookingDate;
 
     public Booking() {
         this.origin = new Location();
@@ -69,5 +74,13 @@ public class Booking {
         this.userId = userId;
     }
 
+
+    public Date getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(Date bookingDate) {
+        this.bookingDate = bookingDate;
+    }
 
 }

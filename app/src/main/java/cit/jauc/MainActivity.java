@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-import com.google.android.gms.auth.api.Auth;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
 public class MainActivity extends AppCompatActivity {
 
     Button button;
+    Button btnOpenBookingHistory;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -36,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,14 +50,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         button = findViewById(R.id.logout_test);
+        btnOpenBookingHistory = findViewById(R.id.btn_booking_history);
         mAuth = FirebaseAuth.getInstance();
 
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mAuth.signOut();
-//                sendToLogin();
+                mAuth.signOut();
+                sendToLogin();
+            }
+        });
+
+        btnOpenBookingHistory.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), BookingHistoryActivity.class);
+                i.putExtra("User", mAuth.getCurrentUser().getUid());
                 startActivity(i);
             }
         });

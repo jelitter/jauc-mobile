@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import cit.jauc.R;
 import cit.jauc.model.Booking;
@@ -29,11 +31,13 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
 
         TextView tvOrigin = convertView.findViewById(R.id.tvBookingOrigin);
         TextView tvDestination = convertView.findViewById(R.id.tvBookingDestination);
-        TextView tvPaid = convertView.findViewById(R.id.tvBookingPaid);
+        TextView tvPaid = convertView.findViewById(R.id.tvBookingPaid); //TODO Change to clickable button to open Invoice details
         TextView tvDate = convertView.findViewById(R.id.tvBookingDate);
 
         tvOrigin.setText("Origin: " + booking.getOrigin().getLon() + ", " + booking.getOrigin().getLat());
         tvDestination.setText("Destination: " + booking.getDestination().getLon() + ", " + booking.getDestination().getLat());
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+        tvDate.setText(df.format(booking.getBookingDate()));
 
         return convertView;
     }

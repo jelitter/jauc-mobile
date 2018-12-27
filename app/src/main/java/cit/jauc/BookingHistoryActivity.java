@@ -19,9 +19,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import cit.jauc.adapter.BookingHistoryAdapter;
 import cit.jauc.model.Booking;
@@ -42,6 +47,8 @@ public class BookingHistoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         activity = this;
 
+        listView = findViewById(R.id.lv_booking_list);
+        String username = getIntent().getStringExtra("User");
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,14 +58,9 @@ public class BookingHistoryActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-
-
-        bookingArrayAdapter = new ArrayAdapter<Booking>(this, android.R.layout.simple_list_item_1, bookingList);
-        listView = findViewById(R.id.lv_booking_list);
-        //listView.setAdapter(bookingArrayAdapter);
-
-        new GetBookingList().execute("user");
+        new GetBookingList().execute(username);
     }
+
 
     private class GetBookingList extends AsyncTask<String, Integer, List<Booking>> {
 
@@ -89,33 +91,43 @@ public class BookingHistoryActivity extends AppCompatActivity {
                 while (keys.hasNext()) {
                     String key = keys.next();
                     if (data.get(key) instanceof JSONObject) {
-                        String userId = ((JSONObject) data.get(key)).getString("userId");
-                        //if(userId.equalsIgnoreCase(user)) { //TODO get user id
-                        Booking booking = new Booking();
-                        booking.setUserId(userId);
-                        String carId = ((JSONObject) data.get(key)).getString("carId");
-                        booking.setCarId(carId);
-                        String invoiceId = ((JSONObject) data.get(key)).getString("invoiceId");
-                        booking.setInvoice(invoiceId);
+                        JSONObject element = (JSONObject) data.get(key);
+                        String userId = element.getString("userId");
+                        if (userId.equalsIgnoreCase(user)) { //TODO get user id
+                            Booking booking = new Booking();
+                            booking.setUserId(userId);
+                            String carId = (element.has("carId")) ? element.getString("carId") : null;
+                            booking.setCarId(carId);
+                            String invoiceId = (element.has("invoiceID")) ? element.getString("invoiceId") : null;
+                            booking.setInvoice(invoiceId);
 
-                        JSONObject origin = ((JSONObject) data.get(key)).getJSONObject("origin");
-                        long originLon = origin.getLong("lon");
-                        long originLat = origin.getLong("lat");
-                        booking.setOrigin(originLon, originLat);
+                            JSONObject origin = element.has("origin") ? element.getJSONObject("origin") : null;
+                            long originLon = origin.getLong("lon");
+                            long originLat = origin.getLong("lat");
+                            booking.setOrigin(originLon, originLat);
 
-                        JSONObject destination = ((JSONObject) data.get(key)).getJSONObject("destination");
-                        long destinationLon = destination.getLong("lon");
-                        long destinationLat = destination.getLong("lat");
-                        booking.setDestination(destinationLon, destinationLat);
+                            JSONObject destination = element.has("destination") ? element.getJSONObject("destination") : null;
+                            long destinationLon = destination.getLong("lon");
+                            long destinationLat = destination.getLong("lat");
+                            booking.setDestination(destinationLon, destinationLat);
 
-                        result.add(booking);
-                        //}
+                            String dateStr = element.has("destination") ? element.getString("date") : null;
+                            if (dateStr != null) {
+                                DateFormat format = new SimpleDateFormat("EEE MMM d yyyy HH:mm:ss Z", Locale.ENGLISH);
+                                Date date = format.parse(dateStr);
+                                booking.setBookingDate(date);
+                            }
+
+                            result.add(booking);
+                        }
 
 
                     }
                 }
 
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
             return result;
