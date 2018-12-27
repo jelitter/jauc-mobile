@@ -1,22 +1,23 @@
 <resources>
-  <string name="app_name">JAUC</string>
-  <string name="title_activity_login">Sign in</string>
-  <!-- Strings related to login -->
-  <string name="prompt_email">Email</string>
-  <string name="prompt_password">Password (optional)</string>
-  <string name="action_sign_in">Sign in or register</string>
-  <string name="action_sign_in_short">Sign in</string>
-  <string name="error_invalid_email">This email address is invalid</string>
-  <string name="error_invalid_password">This password is too short</string>
-  <string name="error_incorrect_password">This password is incorrect</string>
-  <string name="error_field_required">This field is required</string>
-  <string name="permission_rationale">"Contacts permissions are needed for providing email
+    <string name="app_name">JAUC</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
     completions."
   </string>
-  <string name="title_activity_main">MainActivity</string>
-  <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">5ERcxyb564xBJ6l7LjkO6Vu6z</string>
-  <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
-  <string name="facebook_app_id">299312787461447</string>
-  <string name="fb_login_protocol_scheme">fb299312787461447</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">5ERcxyb564xBJ6l7LjkO6Vu6z</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
+    <string name="facebook_app_id">299312787461447</string>
+    <string name="fb_login_protocol_scheme">fb299312787461447</string>
+    <string name="title_activity_booking_history">Booking History</string>
 
 </resources>

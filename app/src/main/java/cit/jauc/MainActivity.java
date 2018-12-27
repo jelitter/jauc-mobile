@@ -54,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
-                sendToLogin();
+//                mAuth.signOut();
+//                sendToLogin();
+                Intent i = new Intent(getBaseContext(), BookingHistoryActivity.class);
+                startActivity(i);
             }
         });
 
