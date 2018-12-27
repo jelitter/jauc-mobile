@@ -1,28 +1,16 @@
 package cit.jauc;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Comment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,17 +19,20 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import cit.jauc.adapter.BookingHistoryAdapter;
 import cit.jauc.model.Booking;
 
 public class BookingHistoryActivity extends AppCompatActivity {
 
     private List<Booking> bookingList;
     private static final String TAG = "BookingHistoryActivity";
-    private DatabaseReference firebaseRef;
-    private FirebaseDatabase database;
+    ArrayAdapter<Booking> bookingArrayAdapter;
+    ListView listView;
+    Context activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +40,8 @@ public class BookingHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking_history);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        activity = this;
 
-         database = FirebaseDatabase.getInstance();
-         firebaseRef = database.getReference("bookings");
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -63,70 +53,14 @@ public class BookingHistoryActivity extends AppCompatActivity {
         });*/
 
 
-        ChildEventListener childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-
-                // A new comment has been added, add it to the displayed list
-                Comment comment = dataSnapshot.getValue(Comment.class);
-
-                // ...
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so displayed the changed comment.
-                Comment newComment = dataSnapshot.getValue(Comment.class);
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so remove it.
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                Comment movedComment = dataSnapshot.getValue(Comment.class);
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-                Toast.makeText(getBaseContext(), "Failed to load comments.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        };
-        firebaseRef.addChildEventListener(childEventListener);
-
-
-        ArrayAdapter<Booking> bookingArrayAdapter = new ArrayAdapter<Booking>(this, android.R.layout.simple_list_item_1, bookingList);
-        ListView listView = findViewById(R.id.lv_booking_list);
+        bookingArrayAdapter = new ArrayAdapter<Booking>(this, android.R.layout.simple_list_item_1, bookingList);
+        listView = findViewById(R.id.lv_booking_list);
         //listView.setAdapter(bookingArrayAdapter);
 
         new GetBookingList().execute("user");
     }
 
-    private class GetBookingList extends AsyncTask<String, Integer, List<Booking>>{
+    private class GetBookingList extends AsyncTask<String, Integer, List<Booking>> {
 
         String jsonResponse = "";
         HttpURLConnection connection = null;
@@ -137,29 +71,58 @@ public class BookingHistoryActivity extends AppCompatActivity {
             String resultAsyncTask = "";
             try {
                 resultAsyncTask = makeHttpGetRequest();
-            } catch (IOException e){
+            } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
 
             if (resultAsyncTask.length() > 0) {
-                return convertJsonToBookings(resultAsyncTask);
+                return convertJsonToBookings(resultAsyncTask, user[0]);
             }
             return null;
         }
 
-        private List<Booking> convertJsonToBookings(String resultAsyncTask) {
+        private List<Booking> convertJsonToBookings(String resultAsyncTask, String user) {
+            List<Booking> result = new ArrayList<>();
             try {
-                JSONObject data = new JSONObject(HashMap<String, Booking>);
-                Log.v("Json data", data.toString());
+                JSONObject data = new JSONObject(resultAsyncTask);
+                Iterator<String> keys = data.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    if (data.get(key) instanceof JSONObject) {
+                        String userId = ((JSONObject) data.get(key)).getString("userId");
+                        //if(userId.equalsIgnoreCase(user)) { //TODO get user id
+                        Booking booking = new Booking();
+                        booking.setUserId(userId);
+                        String carId = ((JSONObject) data.get(key)).getString("carId");
+                        booking.setCarId(carId);
+                        String invoiceId = ((JSONObject) data.get(key)).getString("invoiceId");
+                        booking.setInvoice(invoiceId);
+
+                        JSONObject origin = ((JSONObject) data.get(key)).getJSONObject("origin");
+                        long originLon = origin.getLong("lon");
+                        long originLat = origin.getLong("lat");
+                        booking.setOrigin(originLon, originLat);
+
+                        JSONObject destination = ((JSONObject) data.get(key)).getJSONObject("destination");
+                        long destinationLon = destination.getLong("lon");
+                        long destinationLat = destination.getLong("lat");
+                        booking.setDestination(destinationLon, destinationLat);
+
+                        result.add(booking);
+                        //}
+
+
+                    }
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return null;
+            return result;
         }
 
         private String makeHttpGetRequest() throws IOException {
-            try{
+            try {
                 URL url = new URL(String.format("https://jauc-ae38e.firebaseio.com/bookings.json"));
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -167,19 +130,17 @@ public class BookingHistoryActivity extends AppCompatActivity {
                 connection.setConnectTimeout(15000);
                 connection.connect();
 
-                if(connection.getResponseCode()== 200) {
+                if (connection.getResponseCode() == 200) {
                     InputStream is = connection.getInputStream();
                     jsonResponse = readFromStream(is);
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "readingBookings:failure", e);
-            }
-            finally {
-                if(connection !=null) {
+            } finally {
+                if (connection != null) {
                     connection.disconnect();
                 }
-                if(is != null) {
+                if (is != null) {
                     is.close();
                 }
             }
@@ -188,11 +149,11 @@ public class BookingHistoryActivity extends AppCompatActivity {
 
         private String readFromStream(InputStream is) throws IOException {
             StringBuilder output = new StringBuilder();
-            if(is != null) {
+            if (is != null) {
                 InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
                 BufferedReader br = new BufferedReader(isr);
                 String line = br.readLine();
-                while(line !=null) {
+                while (line != null) {
                     output.append(line);
                     line = br.readLine();
                 }
@@ -205,6 +166,9 @@ public class BookingHistoryActivity extends AppCompatActivity {
             super.onPostExecute(bookings);
 
             bookingList = bookings;
+            BookingHistoryAdapter adapter = new BookingHistoryAdapter(activity, bookings);
+            listView.setAdapter(adapter);
+            //listView.setAdapter(bookingArrayAdapter);
 
         }
 

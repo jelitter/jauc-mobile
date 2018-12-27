@@ -4,10 +4,42 @@ public class Booking {
     private String carId;
     private Invoice invoice;
     private String userId;
-    private float originLon;
-    private float originLat;
-    private float destinationLon;
-    private float destinationLat;
+    private Location origin;
+    private Location destination;
+
+    public Booking() {
+        this.origin = new Location();
+        this.destination = new Location();
+        this.invoice = new Invoice();
+    }
+
+    public Location getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Location origin) {
+        this.origin = origin;
+    }
+
+    public void setOrigin(long longitude, long latitude) {
+        this.origin.setLon(longitude);
+        this.origin.setLat(latitude);
+    }
+
+    public Location getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Location destination) {
+        this.destination = destination;
+    }
+
+    public void setDestination(long longitude, long latitude) {
+        this.destination.setLon(longitude);
+        this.destination.setLat(latitude);
+    }
+
+
 
     public String getCarId() {
         return carId;
@@ -25,6 +57,10 @@ public class Booking {
         this.invoice = invoice;
     }
 
+    public void setInvoice(String id) {
+        this.invoice.setId(id);
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -33,35 +69,5 @@ public class Booking {
         this.userId = userId;
     }
 
-    public float getOriginLon() {
-        return originLon;
-    }
 
-    public void setOriginLon(float originLon) {
-        this.originLon = originLon;
-    }
-
-    public float getOriginLat() {
-        return originLat;
-    }
-
-    public void setOriginLat(float originLat) {
-        this.originLat = originLat;
-    }
-
-    public float getDestinationLon() {
-        return destinationLon;
-    }
-
-    public void setDestinationLon(float destinationLon) {
-        this.destinationLon = destinationLon;
-    }
-
-    public float getDestinationLat() {
-        return destinationLat;
-    }
-
-    public void setDestinationLat(float destinationLat) {
-        this.destinationLat = destinationLat;
-    }
 }
