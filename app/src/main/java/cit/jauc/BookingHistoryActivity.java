@@ -43,17 +43,18 @@ public class BookingHistoryActivity extends AppCompatActivity {
     ArrayAdapter<Booking> bookingArrayAdapter;
     ListView listView;
     Context activity;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_history);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         activity = this;
 
         listView = findViewById(R.id.lv_booking_list);
-        String username = getIntent().getStringExtra("User");
+        username = getIntent().getStringExtra("User");
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +101,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                         String userId = element.getString("userId");
                         if (userId.equalsIgnoreCase(user)) { //TODO get user id
                             Booking booking = new Booking();
+                            booking.setId(key);
                             booking.setUserId(userId);
                             String carId = (element.has("carId")) ? element.getString("carId") : null;
                             booking.setCarId(carId);
@@ -125,7 +127,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                                     JSONObject invoiceJson = new JSONObject(invoiceResult);
                                     Invoice invoice = new Invoice();
                                     invoice.setId(invoiceId);
-                                    invoice.setPaid((invoiceJson.has("paid") ? invoiceJson.getBoolean("paid") : false));
+                                    invoice.setPaid(invoiceJson.has("paid") && invoiceJson.getBoolean("paid"));
                                     invoice.setPrice((invoiceJson.has("price") ? invoiceJson.getDouble("price") : -1));
                                     booking.setInvoice(invoice);
                                 } catch (IOException e) {
@@ -162,9 +164,9 @@ public class BookingHistoryActivity extends AppCompatActivity {
             return result;
         }
 
-        private String makeHttpGetRequest(String jsonUrl) throws IOException {
+        private String makeHttpGetRequest(String requestUrl) throws IOException {
             try {
-                URL url = new URL(String.format(jsonUrl));
+                URL url = new URL(requestUrl);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setReadTimeout(10000);
@@ -214,6 +216,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent i = new Intent(view.getContext(), BookingDetailsActivity.class);
                     i.putExtra("Booking", bookingList.get(position));
+                    i.putExtra("User", username);
                     view.getContext().startActivity(i);
                 }
             });

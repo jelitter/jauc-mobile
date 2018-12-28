@@ -1,8 +1,11 @@
 package cit.jauc;
 
-public class Constants {
-    public static final String BOOKINGSURL = "https://jauc-ae38e.firebaseio.com/bookings";
-    public static final String RATINGSURL = "https://jauc-ae38e.firebaseio.com/reviews";
-    public static final String CARSURL = "https://jauc-ae38e.firebaseio.com/cars";
-    public static final String INVOICESURL = "https://jauc-ae38e.firebaseio.com/invoices";
+class Constants {
+    static final String BOOKINGSURL = "https://jauc-ae38e.firebaseio.com/bookings";
+    static final String RATINGSURL = "https://jauc-ae38e.firebaseio.com/reviews";
+    static final String CARSURL = "https://jauc-ae38e.firebaseio.com/cars";
+    static final String INVOICESURL = "https://jauc-ae38e.firebaseio.com/invoices";
+
+    static final String HAPPYEMOJI = "😊";
+    static final String SADEMOJI = "😡";
 }
