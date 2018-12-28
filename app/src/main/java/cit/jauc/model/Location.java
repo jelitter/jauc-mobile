@@ -1,6 +1,8 @@
 package cit.jauc.model;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     private long lon;
     private long lat;
 

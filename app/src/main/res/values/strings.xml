@@ -18,6 +18,7 @@
     <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
     <string name="facebook_app_id">299312787461447</string>
     <string name="fb_login_protocol_scheme">fb299312787461447</string>
-    <string name="title_activity_booking_history">Booking History</string>
+    <string name="title_activity_booking_history">Trip History</string>
+    <string name="title_activity_booking_details">Trip Details</string>
 
 </resources>

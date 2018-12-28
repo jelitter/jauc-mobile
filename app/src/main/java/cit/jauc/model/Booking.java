@@ -1,16 +1,17 @@
 package cit.jauc.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Booking {
+public class Booking implements Serializable {
     private String carId;
     private Invoice invoice;
     private String userId;
     private Location origin;
     private Location destination;
-
-
     private Date bookingDate;
+
+    private Car car;
 
     public Booking() {
         this.origin = new Location();
@@ -81,6 +82,14 @@ public class Booking {
 
     public void setBookingDate(Date bookingDate) {
         this.bookingDate = bookingDate;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 
 }

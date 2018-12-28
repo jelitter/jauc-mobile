@@ -1,11 +1,14 @@
 package cit.jauc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -30,6 +33,8 @@ import java.util.Locale;
 
 import cit.jauc.adapter.BookingHistoryAdapter;
 import cit.jauc.model.Booking;
+import cit.jauc.model.Car;
+import cit.jauc.model.Invoice;
 
 public class BookingHistoryActivity extends AppCompatActivity {
 
@@ -72,7 +77,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
         protected List<Booking> doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = makeHttpGetRequest();
+                resultAsyncTask = makeHttpGetRequest(Constants.BOOKINGSURL + ".json");
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -98,8 +103,35 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             booking.setUserId(userId);
                             String carId = (element.has("carId")) ? element.getString("carId") : null;
                             booking.setCarId(carId);
-                            String invoiceId = (element.has("invoiceID")) ? element.getString("invoiceId") : null;
+                            if (carId != null) {
+                                try {
+                                    String carResult = makeHttpGetRequest(Constants.CARSURL + "/" + carId + ".json");
+                                    JSONObject carJson = new JSONObject(carResult);
+                                    Car car = new Car();
+                                    car.setId(carId);
+                                    car.setName(carJson.getString("name"));
+                                    car.setPlate(carJson.getString("plate"));
+                                    booking.setCar(car);
+                                } catch (IOException e) {
+                                    Log.w(TAG, "unableToGetCarResult:failure", e);
+                                }
+                            }
+
+                            String invoiceId = (element.has("invoiceId")) ? element.getString("invoiceId") : null;
                             booking.setInvoice(invoiceId);
+                            if (invoiceId != null) {
+                                try {
+                                    String invoiceResult = makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json");
+                                    JSONObject invoiceJson = new JSONObject(invoiceResult);
+                                    Invoice invoice = new Invoice();
+                                    invoice.setId(invoiceId);
+                                    invoice.setPaid((invoiceJson.has("paid") ? invoiceJson.getBoolean("paid") : false));
+                                    invoice.setPrice((invoiceJson.has("price") ? invoiceJson.getDouble("price") : -1));
+                                    booking.setInvoice(invoice);
+                                } catch (IOException e) {
+                                    Log.w(TAG, "unableToGetInvoiceResult:failure", e);
+                                }
+                            }
 
                             JSONObject origin = element.has("origin") ? element.getJSONObject("origin") : null;
                             long originLon = origin.getLong("lon");
@@ -117,11 +149,8 @@ public class BookingHistoryActivity extends AppCompatActivity {
                                 Date date = format.parse(dateStr);
                                 booking.setBookingDate(date);
                             }
-
                             result.add(booking);
                         }
-
-
                     }
                 }
 
@@ -133,9 +162,9 @@ public class BookingHistoryActivity extends AppCompatActivity {
             return result;
         }
 
-        private String makeHttpGetRequest() throws IOException {
+        private String makeHttpGetRequest(String jsonUrl) throws IOException {
             try {
-                URL url = new URL(String.format("https://jauc-ae38e.firebaseio.com/bookings.json"));
+                URL url = new URL(String.format(jsonUrl));
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setReadTimeout(10000);
@@ -180,8 +209,14 @@ public class BookingHistoryActivity extends AppCompatActivity {
             bookingList = bookings;
             BookingHistoryAdapter adapter = new BookingHistoryAdapter(activity, bookings);
             listView.setAdapter(adapter);
-            //listView.setAdapter(bookingArrayAdapter);
-
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent i = new Intent(view.getContext(), BookingDetailsActivity.class);
+                    i.putExtra("Booking", bookingList.get(position));
+                    view.getContext().startActivity(i);
+                }
+            });
         }
 
         @Override

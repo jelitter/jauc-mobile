@@ -16,6 +16,7 @@ import cit.jauc.model.Booking;
 
 public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
 
+    Booking booking;
 
     public BookingHistoryAdapter(Context context, List<Booking> bookings) {
         super(context, 0, bookings);
@@ -23,7 +24,7 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Booking booking = getItem(position);
+        booking = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.booking_history_list, parent, false);
@@ -38,6 +39,7 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
         tvDestination.setText("Destination: " + booking.getDestination().getLon() + ", " + booking.getDestination().getLat());
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         tvDate.setText(df.format(booking.getBookingDate()));
+        tvPaid.setText((booking.getInvoice().isPaid() ? "PAID" : "UNPAID"));
 
         return convertView;
     }
