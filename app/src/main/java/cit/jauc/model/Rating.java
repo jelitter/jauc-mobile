@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Rating implements Serializable {
     private String bookingID;
     private String carID;
-    private int rating;
+    private String rating;
     private String userID;
 
     public String getBookingID() {
@@ -24,11 +24,11 @@ public class Rating implements Serializable {
         this.carID = carID;
     }
 
-    public int getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
