@@ -1,5 +1,6 @@
 package cit.jauc;
 
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -90,6 +91,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 new PostRatingToBooking().execute(rating);
             }
         });
+
+        btnRatingAngry.setEnabled(false);
+        btnRatingHappy.setEnabled(false);
 
     }
 
@@ -223,15 +227,12 @@ public class BookingDetailsActivity extends AppCompatActivity {
                     String key = keys.next();
                     if (data.get(key) instanceof JSONObject) {
                         JSONObject element = (JSONObject) data.get(key);
-                        String id = element.getString("bookingId");
-                        if (id.equalsIgnoreCase(bookingId)) { //TODO get user id
-                            result.setBookingID(data.getString("bookingId"));
-                            if (data.has("rating")) {
-                                result.setRating(data.getString("rating"));
-                            }
-                            if (data.has("userId")) {
-                                result.setUserID(data.getString("userId"));
-                            }
+                        String id = (element.has("bookingId")) ? element.getString("bookingId") : "";
+                        if (id.equalsIgnoreCase(bookingId)) {
+                            result.setBookingID(element.getString("bookingId"));
+                            result.setRating(element.getString("rating"));
+                            result.setUserID(element.getString("userId"));
+
                         }
                     }
                 }
@@ -289,11 +290,15 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 btnRatingAngry.setEnabled(false);
                 btnRatingHappy.setEnabled(false);
                 if (rating.getRating().equalsIgnoreCase(Constants.HAPPYEMOJI)) {
-                    btnRatingHappy.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    // btnRatingAngry.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
+                    btnRatingHappy.getBackground().setColorFilter(0xFF00FF00, PorterDuff.Mode.MULTIPLY);
+                    //btnRatingHappy.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                     btnRatingAngry.setBackgroundColor(getResources().getColor(R.color.common_google_signin_btn_text_light_disabled));
                 }
                 if (rating.getRating().equalsIgnoreCase(Constants.SADEMOJI)) {
-                    btnRatingAngry.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    // btnRatingHappy.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY); // RED
+                    btnRatingAngry.getBackground().setColorFilter(0xFF00FF00, PorterDuff.Mode.MULTIPLY); // GREEN
+                    //btnRatingAngry.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                     btnRatingHappy.setBackgroundColor(getResources().getColor(R.color.common_google_signin_btn_text_light_disabled));
                 }
             } else {

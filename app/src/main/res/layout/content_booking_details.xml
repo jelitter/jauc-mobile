@@ -71,16 +71,6 @@
                 tools:text="😊" />
 
             <Button
-                android:id="@+id/btnRatingNasty"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="🤮"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                tools:text="🤮" />
-
-            <Button
                 android:id="@+id/btnRatingAngry"
                 style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
