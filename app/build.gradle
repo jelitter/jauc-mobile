@@ -43,4 +43,6 @@ dependencies {
     implementation 'com.twitter.sdk.android:twitter-mopub:3.1.1'
     // Facebook API
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    // Stripe payment
+    implementation 'com.stripe:stripe-android:6.1.2'
 }

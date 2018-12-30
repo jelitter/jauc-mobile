@@ -82,6 +82,43 @@ public class HttpFirebaseHandler {
         return jsonResponse;
     }
 
+    public String makeHttpPatchRequest(String query, String requestUrl, String TAG) throws IOException {
+
+        try {
+            URL url = new URL(requestUrl);
+            connection = (HttpsURLConnection) url.openConnection();
+            connection.setReadTimeout(15000);
+            connection.setConnectTimeout(15000);
+            connection.setRequestMethod("PATCH");
+
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.connect();
+            //connection.setDoOutput(true); DO NOT DO THIS
+
+            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+            wr.write(query);
+            wr.flush();
+            wr.close();
+
+            if (connection.getResponseCode() == 200) {
+                InputStream is = connection.getInputStream();
+                jsonResponse = readFromStream(is);
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "HTTPRequest:failure", e);
+
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+            if (is != null) {
+                is.close();
+            }
+        }
+        return jsonResponse;
+    }
+
     private String readFromStream(InputStream is) throws IOException {
         StringBuilder output = new StringBuilder();
         if (is != null) {

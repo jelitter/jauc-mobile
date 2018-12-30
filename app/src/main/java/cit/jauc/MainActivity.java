@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button button;
     Button btnOpenBookingHistory;
+    Button btnOpenUserProfile;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.logout_test);
         btnOpenBookingHistory = findViewById(R.id.btn_booking_history);
+        btnOpenUserProfile = findViewById(R.id.btn_user_profile);
         mAuth = FirebaseAuth.getInstance();
 
         button.setOnClickListener(new OnClickListener() {
@@ -58,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 sendToLogin();
+            }
+        });
+
+        btnOpenUserProfile.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), UserProfileActivity.class);
+                i.putExtra("User", mAuth.getCurrentUser().getUid());
+                startActivity(i);
             }
         });
 
