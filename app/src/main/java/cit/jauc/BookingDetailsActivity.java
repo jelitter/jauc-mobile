@@ -9,20 +9,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import cit.jauc.lib.CoordsConverter;
-import cit.jauc.model.Booking;
-import cit.jauc.model.Rating;
+import android.widget.Toast;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Locale;
+
+import cit.jauc.lib.CoordsConverter;
+import cit.jauc.lib.HttpFirebaseHandler;
+import cit.jauc.model.Booking;
+import cit.jauc.model.Rating;
 
 public class BookingDetailsActivity extends AppCompatActivity {
 
@@ -99,16 +101,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
     private class PostRatingToBooking extends AsyncTask<String, Integer, String> {
 
-        String jsonResponse = "";
-        HttpURLConnection connection = null;
-
-        InputStream is = null;
-
         @Override
         protected String doInBackground(String... params) {
             String resultAsyncTask = "";
-            String charset = "UTF-8";
-
             JSONObject query = new JSONObject();
             try {
                 query.put("carID", (booking.getCar() != null) ? booking.getCar().getId() : null);
@@ -120,7 +115,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
             }
 
             try {
-                resultAsyncTask = makeHttpPostRequest(query.toString(), Constants.RATINGSURL + ".json");
+                resultAsyncTask = new HttpFirebaseHandler().makeHttpPostRequest(query.toString(), Constants.RATINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -131,63 +126,12 @@ public class BookingDetailsActivity extends AppCompatActivity {
             return null;
         }
 
-
-        private String makeHttpPostRequest(String query, String requestUrl) throws IOException {
-
-            try {
-                URL url = new URL(requestUrl);
-                connection = (HttpsURLConnection) url.openConnection();
-                connection.setReadTimeout(15000);
-                connection.setConnectTimeout(15000);
-                connection.setRequestMethod("POST");
-
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                connection.connect();
-                //connection.setDoOutput(true); DO NOT DO THIS
-
-                OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-                wr.write(query);
-                wr.flush();
-                wr.close();
-
-                if (connection.getResponseCode() == 200) {
-                    InputStream is = connection.getInputStream();
-                    jsonResponse = readFromStream(is);
-                }
-
-
-            } catch (IOException e) {
-                Log.w(TAG, "readingBookings:failure", e);
-
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                }
-                if (is != null) {
-                    is.close();
-                }
-            }
-            return jsonResponse;
-        }
-
-        private String readFromStream(InputStream is) throws IOException {
-            StringBuilder output = new StringBuilder();
-            if (is != null) {
-                InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
-                BufferedReader br = new BufferedReader(isr);
-                String line = br.readLine();
-                while (line != null) {
-                    output.append(line);
-                    line = br.readLine();
-                }
-            }
-            return output.toString();
-        }
-
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+
+            Toast.makeText(BookingDetailsActivity.this, "Rating saved.",
+                    Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -206,7 +150,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         protected Rating doInBackground(String... bookingId) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = makeHttpGetRequest(Constants.RATINGSURL + ".json");
+                resultAsyncTask = new HttpFirebaseHandler().makeHttpGetRequest(Constants.RATINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -240,46 +184,6 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return result;
-        }
-
-        private String makeHttpGetRequest(String requestUrl) throws IOException {
-            try {
-                URL url = new URL(requestUrl);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setReadTimeout(10000);
-                connection.setConnectTimeout(15000);
-                connection.connect();
-
-                if (connection.getResponseCode() == 200) {
-                    InputStream is = connection.getInputStream();
-                    jsonResponse = readFromStream(is);
-                }
-            } catch (IOException e) {
-                Log.w(TAG, "readingReview:failure", e);
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                }
-                if (is != null) {
-                    is.close();
-                }
-            }
-            return jsonResponse;
-        }
-
-        private String readFromStream(InputStream is) throws IOException {
-            StringBuilder output = new StringBuilder();
-            if (is != null) {
-                InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
-                BufferedReader br = new BufferedReader(isr);
-                String line = br.readLine();
-                while (line != null) {
-                    output.append(line);
-                    line = br.readLine();
-                }
-            }
-            return output.toString();
         }
 
         @Override

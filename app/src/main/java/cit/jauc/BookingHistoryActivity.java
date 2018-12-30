@@ -15,13 +15,7 @@ import android.widget.ListView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cit.jauc.adapter.BookingHistoryAdapter;
+import cit.jauc.lib.HttpFirebaseHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Car;
 import cit.jauc.model.Invoice;
@@ -70,15 +65,11 @@ public class BookingHistoryActivity extends AppCompatActivity {
 
     private class GetBookingList extends AsyncTask<String, Integer, List<Booking>> {
 
-        String jsonResponse = "";
-        HttpURLConnection connection = null;
-        InputStream is = null;
-
         @Override
         protected List<Booking> doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = makeHttpGetRequest(Constants.BOOKINGSURL + ".json");
+                resultAsyncTask = new HttpFirebaseHandler().makeHttpGetRequest(Constants.BOOKINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -107,7 +98,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             booking.setCarId(carId);
                             if (carId != null) {
                                 try {
-                                    String carResult = makeHttpGetRequest(Constants.CARSURL + "/" + carId + ".json");
+                                    String carResult = new HttpFirebaseHandler().makeHttpGetRequest(Constants.CARSURL + "/" + carId + ".json", TAG);
                                     JSONObject carJson = new JSONObject(carResult);
                                     Car car = new Car();
                                     car.setId(carId);
@@ -123,7 +114,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             booking.setInvoice(invoiceId);
                             if (invoiceId != null) {
                                 try {
-                                    String invoiceResult = makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json");
+                                    String invoiceResult = new HttpFirebaseHandler().makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json", TAG);
                                     JSONObject invoiceJson = new JSONObject(invoiceResult);
                                     Invoice invoice = new Invoice();
                                     invoice.setId(invoiceId);
@@ -162,46 +153,6 @@ public class BookingHistoryActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return result;
-        }
-
-        private String makeHttpGetRequest(String requestUrl) throws IOException {
-            try {
-                URL url = new URL(requestUrl);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setReadTimeout(10000);
-                connection.setConnectTimeout(15000);
-                connection.connect();
-
-                if (connection.getResponseCode() == 200) {
-                    InputStream is = connection.getInputStream();
-                    jsonResponse = readFromStream(is);
-                }
-            } catch (IOException e) {
-                Log.w(TAG, "readingBookings:failure", e);
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                }
-                if (is != null) {
-                    is.close();
-                }
-            }
-            return jsonResponse;
-        }
-
-        private String readFromStream(InputStream is) throws IOException {
-            StringBuilder output = new StringBuilder();
-            if (is != null) {
-                InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
-                BufferedReader br = new BufferedReader(isr);
-                String line = br.readLine();
-                while (line != null) {
-                    output.append(line);
-                    line = br.readLine();
-                }
-            }
-            return output.toString();
         }
 
         @Override
