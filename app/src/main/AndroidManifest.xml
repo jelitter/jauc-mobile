@@ -72,7 +72,8 @@
             android:required="false" />
 
         <activity android:name=".Book_Activity" />
-        <activity android:name=".searchAddress_Activity"></activity>
+        <activity android:name=".searchAddress_Activity" />
+        <activity android:name=".PickDestinationActivity"></activity>
     </application>
 
 </manifest>

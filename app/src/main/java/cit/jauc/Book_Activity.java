@@ -1,6 +1,7 @@
 package cit.jauc;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,26 +14,22 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +39,7 @@ import java.util.Locale;
  * Use the Location component to easily add a device location "puck" to a Mapbox map.
  */
 public class Book_Activity extends AppCompatActivity implements
-        OnMapReadyCallback, PermissionsListener {
+        com.mapbox.mapboxsdk.maps.OnMapReadyCallback, PermissionsListener {
 
     private PermissionsManager permissionsManager;
     private MapboxMap mapboxMap;
@@ -50,6 +47,7 @@ public class Book_Activity extends AppCompatActivity implements
     private TextView tv_curentAddress;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private Button bt_selectDestination;
 
 
     @Override
@@ -154,6 +152,14 @@ public class Book_Activity extends AppCompatActivity implements
             permissionsManager.requestLocationPermissions(this);
         }
 
+        bt_selectDestination = findViewById(R.id.bt_bookHere);
+        bt_selectDestination.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pickDestinationIntent = new Intent(Book_Activity.this, PickDestinationActivity.class);
+                startActivity(pickDestinationIntent);
+            }
+        });
 
     }
 
