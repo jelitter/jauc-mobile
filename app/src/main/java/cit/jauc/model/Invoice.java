@@ -25,7 +25,6 @@ public class Invoice implements Serializable {
     public boolean isPaid() {
         return isPaid;
     }
-
     public void setPaid(boolean paid) {
         isPaid = paid;
     }
@@ -33,7 +32,6 @@ public class Invoice implements Serializable {
     public double getPrice() {
         return price / 100;
     }
-
     public void setPrice(double price) {
         this.price = (int) Math.round(price * 100);
     }
