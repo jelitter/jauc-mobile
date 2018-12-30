@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">JAUC</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
@@ -14,11 +14,12 @@
     completions."
   </string>
     <string name="title_activity_main">JAUC</string>
-    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">5ERcxyb564xBJ6l7LjkO6Vu6z</string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false" tools:ignore="ExtraTranslation">5ERcxyb564xBJ6l7LjkO6Vu6z</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false" tools:ignore="ExtraTranslation">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
     <string name="facebook_app_id">299312787461447</string>
     <string name="fb_login_protocol_scheme">fb299312787461447</string>
-    <string name="title_activity_booking_history">Booking History</string>
-    <string name="title_activity_contact_support">Contact Support Activity</string>
 
+    <string name="title_activity_contact_support">Contact Support Activity</string>
+    <string name="title_activity_booking_history">Trip History</string>
+    <string name="title_activity_booking_details">Trip Details</string>
 </resources>

@@ -77,7 +77,11 @@
         <activity
             android:name=".ContactSupportActivity"
             android:label="@string/title_activity_contact_support"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BookingDetailsActivity"
+            android:label="@string/title_activity_booking_details"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
