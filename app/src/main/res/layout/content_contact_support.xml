@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ContactSupportActivity"
+    tools:showIn="@layout/activity_contact_support">
+
+    <TextView
+        android:id="@+id/tvSupportHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/browser_actions_bg_grey"
+        android:padding="8dp"
+        android:text="We're sorry you have experienced these issues. Please leave a comment and we'll contact you as soon as possible."
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tvSupportHeader">
+
+        <TextView
+            android:id="@+id/txEmailHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact E-Mail"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+        <EditText
+            android:id="@+id/txtSupportEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/txTicketTextHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your Request"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+        <EditText
+            android:id="@+id/txtSupportText"
+            android:layout_width="match_parent"
+            android:layout_height="273dp"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSendTicket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:text="Send Email"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+</android.support.constraint.ConstraintLayout>

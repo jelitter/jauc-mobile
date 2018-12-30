@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -36,7 +36,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -73,6 +73,10 @@
         <activity
             android:name=".BookingHistoryActivity"
             android:label="@string/title_activity_booking_history"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ContactSupportActivity"
+            android:label="@string/title_activity_contact_support"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

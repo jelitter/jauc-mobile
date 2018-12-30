@@ -19,5 +19,6 @@
     <string name="facebook_app_id">299312787461447</string>
     <string name="fb_login_protocol_scheme">fb299312787461447</string>
     <string name="title_activity_booking_history">Booking History</string>
+    <string name="title_activity_contact_support">Contact Support Activity</string>
 
 </resources>
