@@ -1,15 +1,32 @@
 package cit.jauc.model;
 
-public class Car {
+import java.io.Serializable;
+
+public class Car implements Serializable {
+
+    private String id;
     private String name;
     private String plate;
     private Location location;
 
+    public Car() {
+        this.location = new Location();
+    }
+
     public Car(String name, String plate, long locationLongitude, long locationLatitude) {
         this.name = name;
         this.plate = plate;
+        this.location = new Location();
         this.location.setLon(locationLongitude);
         this.location.setLat(locationLatitude);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
