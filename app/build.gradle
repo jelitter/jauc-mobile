@@ -18,6 +18,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -43,4 +51,9 @@ dependencies {
     implementation 'com.twitter.sdk.android:twitter-mopub:3.1.1'
     // Facebook API
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    // Mapbox
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.6.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places:0.6.0'
+
 }
