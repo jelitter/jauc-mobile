@@ -8,36 +8,29 @@
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        mapbox:layout_constraintBottom_toTopOf="@+id/btn_goHere"
+        mapbox:layout_constraintBottom_toBottomOf="parent"
         mapbox:layout_constraintEnd_toEndOf="parent"
         mapbox:layout_constraintStart_toStartOf="parent"
         mapbox:layout_constraintTop_toTopOf="parent"
-        mapbox:mapbox_cameraTargetLat="51.885336"
-        mapbox:mapbox_cameraTargetLng="-8.534492"
+        mapbox:mapbox_cameraTargetLat="51.84"
+        mapbox:mapbox_cameraTargetLng="-7.76"
         mapbox:mapbox_cameraZoom="16"
-        mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets" />
+        mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets"
+        mapbox:mapbox_uiRotateGestures="false" />
 
     <Button
-        android:id="@+id/btn_goHere"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="BOOK FROM HERE"
-        mapbox:layout_constraintBottom_toBottomOf="parent"
-        mapbox:layout_constraintEnd_toEndOf="parent"
-        mapbox:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/go_to_picker_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:text="@string/go_to_picker_activity" />
 
+    <TextView
+        android:id="@+id/selected_location_info_textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>

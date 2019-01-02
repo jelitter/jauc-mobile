@@ -20,5 +20,18 @@
         mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets"
         mapbox:mapbox_uiRotateGestures="false" />
 
+    <Button
+        android:id="@+id/go_to_picker_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:text="@string/go_to_picker_activity" />
+
+    <TextView
+        android:id="@+id/selected_location_info_textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </android.support.constraint.ConstraintLayout>
 

@@ -1,17 +1,20 @@
 package cit.jauc;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -27,8 +30,6 @@ import com.mapbox.mapboxsdk.plugins.places.picker.model.PlacePickerOptions;
 
 import java.util.List;
 
-import cit.jauc.model.Location;
-
 public class destinationActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         PermissionsListener {
@@ -38,21 +39,25 @@ public class destinationActivity extends AppCompatActivity implements
 
 
     private MapView mapView;
+    private String originAddress;
     private double originLat;
     private double originLon;
+    private Point destinyPoint;
     private MapboxMap mapboxMap;
     private PermissionsManager permissionsManager;
-
+    private Intent receiveIntent;
+    private Button goToPickerActivityButton;
+    private TextView selectedLocationTextView;
+    private String destinationAddress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        originLat = getIntent().getLongExtra("originLat");
-//        originLon = getIntent().getLongExtra("originLon");
-
-        originLat = 51.885336;
-        originLon = -8.534492;
+        receiveIntent = getIntent();
+        originLat = receiveIntent.getDoubleExtra("originLat", 51.885336);
+        originLon = receiveIntent.getDoubleExtra("originLon", -8.534492);
+        originAddress = receiveIntent.getStringExtra("originAddress");
 
         // Mapbox Access token
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
@@ -72,9 +77,49 @@ public class destinationActivity extends AppCompatActivity implements
                         .accessToken(getString(R.string.mapbox_access_token))
                         .placeOptions(PlacePickerOptions.builder()
                                 .statingCameraPosition(new CameraPosition.Builder()
-                                        .target(new LatLng((double) originLat, (double) originLon)).zoom(16).build())
+                                        .target(new LatLng(originLat, originLon)).zoom(16).build())
                                 .build())
                         .build(this), REQUEST_CODE);
+    }
+
+    @SuppressLint("StringFormatInvalid")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        selectedLocationTextView = findViewById(R.id.selected_location_info_textview);
+
+        if (resultCode == RESULT_CANCELED) {
+            // Show the button and set the OnClickListener()
+            goToPickerActivityButton = findViewById(R.id.go_to_picker_button);
+            goToPickerActivityButton.setVisibility(View.VISIBLE);
+            goToPickerActivityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToPickerActivity();
+                }
+
+            });
+        } else if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            // Retrieve the information from the selected location's CarmenFeature
+            CarmenFeature carmenFeature = PlacePicker.getPlace(data);
+
+            // Set the TextView text to the entire CarmenFeature.
+            selectedLocationTextView.setText(String.format(
+                    getString(R.string.selected_place_info), carmenFeature.toJson()));
+
+            //Get a Point object from carmenFeature
+            destinyPoint = carmenFeature.center();
+            destinationAddress = carmenFeature.placeName();
+
+            Intent bookingSummaryIntent = new Intent(this, bookingSummaryActivity.class);
+            bookingSummaryIntent.putExtra("originAddress", originAddress);
+            bookingSummaryIntent.putExtra("originLat", originLat);
+            bookingSummaryIntent.putExtra("originLon", originLon);
+            bookingSummaryIntent.putExtra("destinationAddress", destinationAddress);
+            bookingSummaryIntent.putExtra("destinationLat", destinyPoint.latitude());
+            bookingSummaryIntent.putExtra("destinationLon", destinyPoint.longitude());
+            startActivity(bookingSummaryIntent);
+        }
     }
 
     @Override
@@ -82,6 +127,7 @@ public class destinationActivity extends AppCompatActivity implements
         destinationActivity.this.mapboxMap = mapboxMap;
         enableLocationComponent();
     }
+
 
 
     @SuppressWarnings( {"MissingPermission"})

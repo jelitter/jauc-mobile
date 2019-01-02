@@ -80,7 +80,9 @@
             android:label="@string/title_activity_booking_details"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".originActivity" />
-        <activity android:name=".destinationActivity"></activity>
+        <activity android:name=".destinationActivity" />
+        <activity android:name=".bookingConfirmedActivity" />
+        <activity android:name=".bookingSummaryActivity"></activity>
     </application>
 
 </manifest>

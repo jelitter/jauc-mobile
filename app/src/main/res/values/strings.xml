@@ -24,5 +24,6 @@
     <string name="user_location_permission_explanation">Needed to locate automatically your position</string>
     <string name="user_location_permission_not_granted">Unable to locate automatically your position</string>
     <string name="selected_place_info">Address selected</string>
+    <string name="go_to_picker_activity">Address Picker</string>
 
 </resources>
