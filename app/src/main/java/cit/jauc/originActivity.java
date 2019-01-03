@@ -55,6 +55,8 @@ public class originActivity extends AppCompatActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         userLocation = new cit.jauc.model.Location();
         retrieveLocation(userLocation);
 
