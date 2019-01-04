@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import cit.jauc.lib.CoordsConverter;
-import cit.jauc.lib.HttpFirebaseHandler;
+import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Rating;
 
@@ -115,7 +115,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
             }
 
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpPostRequest(query.toString(), Constants.RATINGSURL + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpPostRequest(query.toString(), Constants.RATINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -150,7 +150,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         protected Rating doInBackground(String... bookingId) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpGetRequest(Constants.RATINGSURL + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.RATINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }

@@ -14,9 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stripe.android.Stripe;
-import com.stripe.android.TokenCallback;
+import com.stripe.android.SourceCallback;
 import com.stripe.android.model.Card;
-import com.stripe.android.model.Token;
+import com.stripe.android.model.Source;
+import com.stripe.android.model.SourceParams;
 import com.stripe.android.view.CardInputWidget;
 
 import org.json.JSONException;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import cit.jauc.lib.HttpFirebaseHandler;
+import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.User;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -67,26 +68,27 @@ public class UserProfileActivity extends AppCompatActivity {
                     Toast.makeText(UserProfileActivity.this, "Wrong credit card details", Toast.LENGTH_SHORT).show();
                 } else {
                     cardToSave.setName(txtFullName.getText().toString().trim());
-                    Stripe stripe = new Stripe(UserProfileActivity.this, "pk_test_S6GwdcyEn8QWC8a83g5qsc86");
-                    stripe.createToken(
-                            cardToSave,
-                            new TokenCallback() {
-                                public void onSuccess(Token token) {
-                                    // Send token to your server
-                                    if (currentUser != null) {
-                                        new PostToken().execute(currentUser.getKey(), token.getId());
-                                    }
-                                }
+                    Stripe mStripe = new Stripe(UserProfileActivity.this, "pk_test_S6GwdcyEn8QWC8a83g5qsc86");
 
+                    SourceParams cardSourceParams = SourceParams.createCardParams(cardToSave);
+                    // The asynchronous way to do it. Call this method on the main thread.
+                    mStripe.createSource(
+                            cardSourceParams,
+                            new SourceCallback() {
+                                @Override
                                 public void onError(Exception error) {
-                                    // Show localized error message
+                                    // Tell the user that something went wrong
                                     Toast.makeText(UserProfileActivity.this,
                                             error.getLocalizedMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
                                 }
-                            }
-                    );
+
+                                @Override
+                                public void onSuccess(Source source) {
+                                    new StripeCustomerWorkflow().execute(currentUser.getKey(), currentUser.getEmail(), source.getId());
+                                }
+                            });
                 }
             }
         });
@@ -99,7 +101,7 @@ public class UserProfileActivity extends AppCompatActivity {
         protected User doInBackground(String... userId) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpGetRequest(Constants.USERURL + "/" + userId[0] + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + userId[0] + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -145,26 +147,35 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-    private class PostToken extends AsyncTask<String, Integer, String> {
+    private class StripeCustomerWorkflow extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... params) {
             String resultAsyncTask = "";
-            JSONObject query = new JSONObject();
+            String customerToken = "";
+            JSONObject stripeQuery = new JSONObject();
             String userId = params[0];
+            String userEmail = params[1];
+            String cardToken = params[2];
             try {
-                query.put("stripeToken", params[1]);
-//                query.put("carID", (booking.getCar() != null) ? booking.getCar().getId() : null);
-//                query.put("rating", params[0]);
-//                query.put("userId", username);
-//                query.put("bookingId", booking.getId());
+                stripeQuery.put("source", cardToken);
+                stripeQuery.put("email", userEmail);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             try {
-                new HttpFirebaseHandler().makeHttpPatchRequest(query.toString(), Constants.USERURL + "/" + userId + ".json", TAG);
+                String jsonresponse = new HttpHandler().makeHttpPostRequest(stripeQuery.toString(), Constants.STRIPEURL + "/create", TAG);
+                JSONObject data = new JSONObject(jsonresponse);
+                if (data.has("object") && data.getString("object").equalsIgnoreCase("customer")) {
+                    customerToken = (data.has("id")) ? data.getString("id") : "";
+                }
+                JSONObject query = new JSONObject();
+                query.put("customerToken", customerToken);
+                resultAsyncTask = new HttpHandler().makeHttpPatchRequest(query.toString(), Constants.USERURL + "/" + userId + ".json", TAG);
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 

@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class HttpFirebaseHandler {
+public class HttpHandler {
     String jsonResponse = "";
     HttpURLConnection connection = null;
     InputStream is = null;

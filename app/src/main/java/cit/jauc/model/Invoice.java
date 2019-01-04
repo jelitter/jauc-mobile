@@ -7,6 +7,8 @@ public class Invoice implements Serializable {
     private String id;
     private boolean isPaid;
     private int price;
+    private String description;
+    private User customer;
 
     public Invoice() {
     }
@@ -36,4 +38,19 @@ public class Invoice implements Serializable {
         this.price = (int) Math.round(price * 100);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public User getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(User customer) {
+        this.customer = customer;
+    }
 }

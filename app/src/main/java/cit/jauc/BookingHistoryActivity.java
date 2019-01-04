@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cit.jauc.adapter.BookingHistoryAdapter;
-import cit.jauc.lib.HttpFirebaseHandler;
+import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Car;
 import cit.jauc.model.Invoice;
@@ -69,7 +69,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
         protected List<Booking> doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpGetRequest(Constants.BOOKINGSURL + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.BOOKINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -98,7 +98,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             booking.setCarId(carId);
                             if (carId != null) {
                                 try {
-                                    String carResult = new HttpFirebaseHandler().makeHttpGetRequest(Constants.CARSURL + "/" + carId + ".json", TAG);
+                                    String carResult = new HttpHandler().makeHttpGetRequest(Constants.CARSURL + "/" + carId + ".json", TAG);
                                     JSONObject carJson = new JSONObject(carResult);
                                     Car car = new Car();
                                     car.setId(carId);
@@ -114,7 +114,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             booking.setInvoice(invoiceId);
                             if (invoiceId != null) {
                                 try {
-                                    String invoiceResult = new HttpFirebaseHandler().makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json", TAG);
+                                    String invoiceResult = new HttpHandler().makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json", TAG);
                                     JSONObject invoiceJson = new JSONObject(invoiceResult);
                                     Invoice invoice = new Invoice();
                                     invoice.setId(invoiceId);
