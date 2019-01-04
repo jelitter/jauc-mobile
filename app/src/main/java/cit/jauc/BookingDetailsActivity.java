@@ -1,5 +1,6 @@
 package cit.jauc;
 
+import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -101,6 +102,19 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
     private class PostRatingToBooking extends AsyncTask<String, Integer, String> {
 
+
+        ProgressDialog progressDialog = new ProgressDialog(BookingDetailsActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Sending your level of satisfaction to our server...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
+
         @Override
         protected String doInBackground(String... params) {
             String resultAsyncTask = "";
@@ -145,6 +159,17 @@ public class BookingDetailsActivity extends AppCompatActivity {
         String jsonResponse = "";
         HttpURLConnection connection = null;
         InputStream is = null;
+        ProgressDialog progressDialog = new ProgressDialog(BookingDetailsActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Loading trip details...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
 
         @Override
         protected Rating doInBackground(String... bookingId) {
@@ -209,6 +234,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 btnRatingAngry.setEnabled(true);
                 btnRatingHappy.setEnabled(true);
             }
+
+            progressDialog.dismiss();
         }
 
         @Override

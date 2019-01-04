@@ -29,23 +29,61 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/txtProfileNameHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name:" />
+                android:layout_margin="10dp"
+                android:text="Name:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
                 android:id="@+id/txtProfileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=". . ." />
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:text=". . ."
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lvStoredCard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="Stored Card ending in ..." />
+
+            <TextView
+                android:id="@+id/txtStoredCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="####" />
+
+            <Button
+                android:id="@+id/btnChangeCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Add New" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lvNewCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

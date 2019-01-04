@@ -1,6 +1,8 @@
 package cit.jauc.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String displayName;
     private String email;

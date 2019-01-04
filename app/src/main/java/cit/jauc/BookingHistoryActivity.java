@@ -1,5 +1,6 @@
 package cit.jauc;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -64,6 +65,17 @@ public class BookingHistoryActivity extends AppCompatActivity {
 
 
     private class GetBookingList extends AsyncTask<String, Integer, List<Booking>> {
+        ProgressDialog progressDialog = new ProgressDialog(BookingHistoryActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Loading trip history...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
 
         @Override
         protected List<Booking> doInBackground(String... user) {
@@ -120,6 +132,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                                     invoice.setId(invoiceId);
                                     invoice.setPaid(invoiceJson.has("paid") && invoiceJson.getBoolean("paid"));
                                     invoice.setPrice((invoiceJson.has("price") ? invoiceJson.getDouble("price") : -1));
+                                    invoice.setDescription((invoiceJson.has("description")) ? invoiceJson.getString("description") : "");
                                     booking.setInvoice(invoice);
                                 } catch (IOException e) {
                                     Log.w(TAG, "unableToGetInvoiceResult:failure", e);
@@ -171,6 +184,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                     view.getContext().startActivity(i);
                 }
             });
+            progressDialog.dismiss();
         }
 
         @Override

@@ -8,7 +8,7 @@ public class Invoice implements Serializable {
     private boolean isPaid;
     private int price;
     private String description;
-    private User customer;
+    private StripeCustomer customer;
 
     public Invoice() {
     }
@@ -46,11 +46,11 @@ public class Invoice implements Serializable {
         this.description = description;
     }
 
-    public User getCustomer() {
+    public StripeCustomer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(User customer) {
+    public void setCustomer(StripeCustomer customer) {
         this.customer = customer;
     }
 }

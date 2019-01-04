@@ -1,6 +1,9 @@
 package cit.jauc;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,19 +38,53 @@ public class UserProfileActivity extends AppCompatActivity {
     Context activity;
     String username;
     TextView txtFullName;
+    TextView txtLast4;
     Button btnAddCard;
+    Button btnAddNewCard;
     CardInputWidget mCardInputWidget;
-    private User currentUser;
+    String userEmail;
+    String userId;
+    SharedPreferences sharedpreferences;
+    LinearLayout lvNewCard;
+    LinearLayout lvStoredCard;
+    ProgressDialog progDailog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        sharedpreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
-        username = getIntent().getStringExtra("User");
+        userId = sharedpreferences.getString("userId", getIntent().getStringExtra("userId"));
+        username = sharedpreferences.getString("userDisplayName", getIntent().getStringExtra("User"));
         txtFullName = findViewById(R.id.txtProfileName);
-        btnAddCard = findViewById(R.id.btnAddPayment);
+        txtFullName.setText(username);
+        userEmail = sharedpreferences.getString("userDisplayName", "test@test.com");
+
         mCardInputWidget = findViewById(R.id.card_input_widget);
+        btnAddCard = findViewById(R.id.btnAddPayment);
+        btnAddNewCard = findViewById(R.id.btnChangeCard);
+        txtLast4 = findViewById(R.id.txtStoredCard);
+        lvNewCard = findViewById(R.id.lvNewCard);
+        lvStoredCard = findViewById(R.id.lvStoredCard);
+
+        String last4 = sharedpreferences.getString("card", "");
+        txtLast4.setText(last4);
+
+        btnAddNewCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lvNewCard.setVisibility(LinearLayout.VISIBLE);
+            }
+        });
+
+        if(last4.equalsIgnoreCase("")) {
+            lvNewCard.setVisibility(LinearLayout.VISIBLE);
+            lvStoredCard.setVisibility(LinearLayout.GONE);
+        } else {
+            lvNewCard.setVisibility(LinearLayout.GONE);
+            lvStoredCard.setVisibility(LinearLayout.VISIBLE);
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,7 +101,13 @@ public class UserProfileActivity extends AppCompatActivity {
         btnAddCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Card cardToSave = mCardInputWidget.getCard();
+                progDailog = new ProgressDialog(UserProfileActivity.this);
+                progDailog.setMessage("Contacting payment provider...");
+                progDailog.setIndeterminate(false);
+                progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progDailog.setCancelable(true);
+                progDailog.show();
+                final Card cardToSave = mCardInputWidget.getCard();
                 if (cardToSave == null) {
                     Toast.makeText(UserProfileActivity.this, "Wrong credit card details", Toast.LENGTH_SHORT).show();
                 } else {
@@ -82,72 +126,34 @@ public class UserProfileActivity extends AppCompatActivity {
                                             error.getLocalizedMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
+                                    progDailog.dismiss();
                                 }
 
                                 @Override
                                 public void onSuccess(Source source) {
-                                    new StripeCustomerWorkflow().execute(currentUser.getKey(), currentUser.getEmail(), source.getId());
+                                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                                    editor.putString("card", cardToSave.getLast4());
+                                    editor.commit();
+                                    new StripeCustomerWorkflow().execute(userId, userEmail, source.getId());
                                 }
                             });
                 }
             }
         });
-        new GetUserProfile().execute(username);
     }
 
-    private class GetUserProfile extends AsyncTask<String, Integer, User> {
-
-        @Override
-        protected User doInBackground(String... userId) {
-            String resultAsyncTask = "";
-            try {
-                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + userId[0] + ".json", TAG);
-            } catch (IOException e) {
-                Log.w(TAG, "closingInputStream:failure", e);
-            }
-
-            if (resultAsyncTask.length() > 0) {
-                return convertJsonToUser(resultAsyncTask);
-            }
-            return null;
-        }
-
-        private User convertJsonToUser(String resultAsyncTask) {
-            User result = new User();
-
-            try {
-                JSONObject data = new JSONObject(resultAsyncTask);
-
-                String id = (data.has("key")) ? data.getString("key") : "";
-                if (!id.equalsIgnoreCase("")) {
-                    result.setKey(data.getString("key"));
-                    result.setDisplayName(data.getString("displayName"));
-                    result.setEmail(data.getString("email"));
-                    result.setPhotoUrl(data.getString("photoUrl"));
-                }
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(User user) {
-            super.onPostExecute(user);
-            currentUser = user;
-            txtFullName.setText(user.getDisplayName());
-
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-    }
 
     private class StripeCustomerWorkflow extends AsyncTask<String, Integer, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progDailog.setMessage("Saving card details...");
+            progDailog.setIndeterminate(false);
+            progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progDailog.setCancelable(true);
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -175,6 +181,9 @@ public class UserProfileActivity extends AppCompatActivity {
                 resultAsyncTask = new HttpHandler().makeHttpPatchRequest(query.toString(), Constants.USERURL + "/" + userId + ".json", TAG);
             } catch (IOException e) {
                 e.printStackTrace();
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("card", "");
+                editor.commit();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -191,6 +200,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
             Toast.makeText(UserProfileActivity.this, "Card saved.",
                     Toast.LENGTH_SHORT).show();
+            progDailog.dismiss();
+            lvNewCard.setVisibility(LinearLayout.GONE);
+            String last4 = sharedpreferences.getString("card", "");
+            txtLast4.setText(last4);
+            lvStoredCard.setVisibility(LinearLayout.VISIBLE);
         }
 
         @Override
