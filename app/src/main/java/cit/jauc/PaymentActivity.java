@@ -1,5 +1,8 @@
 package cit.jauc;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Invoice;
@@ -22,6 +27,7 @@ import cit.jauc.model.Invoice;
 public class PaymentActivity extends AppCompatActivity {
 
     private final String TAG = "PaymentActivity";
+    SharedPreferences sharedpreferences;
     Button btnPayNewCard;
     Button btnPayStoredCard;
     TextView txtInvoiceId;
@@ -37,6 +43,16 @@ public class PaymentActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         invoice = (Invoice) getIntent().getSerializableExtra("invoice");
+        txtInvoiceId = findViewById(R.id.txtPaymentInvoice);
+        txtAmount = findViewById(R.id.txtPaymentAmount);
+        txtTripDetails = findViewById(R.id.txtPaymentTrip);
+        btnPayNewCard = findViewById(R.id.btnPayNew);
+        btnPayStoredCard = findViewById(R.id.btnPayToken);
+
+        txtInvoiceId.setText(invoice.getId());
+        Locale locale = new Locale("en", "IE");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        txtAmount.setText(currencyFormatter.format(invoice.getPrice()));
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -57,17 +73,30 @@ public class PaymentActivity extends AppCompatActivity {
 
     private class StripePaymentWorkflow extends AsyncTask<Object, Integer, String> {
 
+        ProgressDialog progressDialog = new ProgressDialog(PaymentActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Processing payment...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
+
         @Override
         protected String doInBackground(Object... params) {
             String resultAsyncTask = "";
             String customerToken = "";
+            // TODO get token from database
             JSONObject stripeQuery = new JSONObject();
             Invoice inv = (Invoice) params[0];
 
             try {
                 stripeQuery.put("amount", inv.getPrice());
                 stripeQuery.put("description", inv.getDescription());
-                stripeQuery.put("stripeCustomer", inv.getCustomer() );
+                stripeQuery.put("stripeCustomer", customerToken );
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -87,6 +116,8 @@ public class PaymentActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+
+            progressDialog.dismiss();
 
             Toast.makeText(PaymentActivity.this, "Result " + result,
                     Toast.LENGTH_SHORT).show();
