@@ -7,6 +7,8 @@ public class Invoice implements Serializable {
     private String id;
     private boolean isPaid;
     private int price;
+    private String description;
+    private StripeCustomer customer;
 
     public Invoice() {
     }
@@ -25,7 +27,6 @@ public class Invoice implements Serializable {
     public boolean isPaid() {
         return isPaid;
     }
-
     public void setPaid(boolean paid) {
         isPaid = paid;
     }
@@ -33,9 +34,23 @@ public class Invoice implements Serializable {
     public double getPrice() {
         return price / 100;
     }
-
     public void setPrice(double price) {
         this.price = (int) Math.round(price * 100);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public StripeCustomer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(StripeCustomer customer) {
+        this.customer = customer;
+    }
 }

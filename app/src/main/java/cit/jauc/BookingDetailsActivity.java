@@ -1,5 +1,6 @@
 package cit.jauc;
 
+import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import cit.jauc.lib.CoordsConverter;
-import cit.jauc.lib.HttpFirebaseHandler;
+import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Rating;
 
@@ -101,6 +102,19 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
     private class PostRatingToBooking extends AsyncTask<String, Integer, String> {
 
+
+        ProgressDialog progressDialog = new ProgressDialog(BookingDetailsActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Sending your level of satisfaction to our server...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
+
         @Override
         protected String doInBackground(String... params) {
             String resultAsyncTask = "";
@@ -115,7 +129,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
             }
 
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpPostRequest(query.toString(), Constants.RATINGSURL + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpPostRequest(query.toString(), Constants.RATINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -145,12 +159,23 @@ public class BookingDetailsActivity extends AppCompatActivity {
         String jsonResponse = "";
         HttpURLConnection connection = null;
         InputStream is = null;
+        ProgressDialog progressDialog = new ProgressDialog(BookingDetailsActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Loading trip details...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
 
         @Override
         protected Rating doInBackground(String... bookingId) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpGetRequest(Constants.RATINGSURL + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.RATINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -209,6 +234,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 btnRatingAngry.setEnabled(true);
                 btnRatingHappy.setEnabled(true);
             }
+
+            progressDialog.dismiss();
         }
 
         @Override

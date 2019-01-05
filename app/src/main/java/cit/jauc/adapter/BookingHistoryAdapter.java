@@ -1,23 +1,28 @@
 package cit.jauc.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import cit.jauc.PaymentActivity;
 import cit.jauc.R;
 import cit.jauc.lib.CoordsConverter;
 import cit.jauc.model.Booking;
 
 public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
 
-    private Booking booking;
+    Booking booking;
+    Button btnPay;
+    TextView tvPaid;
 
     public BookingHistoryAdapter(Context context, List<Booking> bookings) {
         super(context, 0, bookings);
@@ -33,14 +38,31 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
 
         TextView tvOrigin = convertView.findViewById(R.id.tvBookingOrigin);
         TextView tvDestination = convertView.findViewById(R.id.tvBookingDestination);
-        TextView tvPaid = convertView.findViewById(R.id.tvBookingPaid); //TODO Change to clickable button to open Invoice details
         TextView tvDate = convertView.findViewById(R.id.tvBookingDate);
+        tvPaid = convertView.findViewById(R.id.tvBookingPaid);
+        btnPay = convertView.findViewById(R.id.btnPayInvoice);
 
         tvOrigin.setText("Origin: " + CoordsConverter.getLocationfromCoords(booking.getOrigin().getLon(), booking.getOrigin().getLat()));
         tvDestination.setText("Destination: " + CoordsConverter.getLocationfromCoords(booking.getDestination().getLon(), booking.getDestination().getLat()));
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         tvDate.setText(df.format(booking.getBookingDate()));
-        tvPaid.setText((booking.getInvoice().isPaid() ? "PAID" : "UNPAID"));
+        tvPaid.setText((booking.getInvoice().isPaid() ? "PAID with Invoice #" + booking.getInvoice().getId() : "Not Yet Paid"));
+
+        btnPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), PaymentActivity.class);
+                i.putExtra("booking", booking);
+                i.putExtra("invoice", booking.getInvoice());
+                v.getContext().startActivity(i);
+            }
+        });
+
+        if(booking.getInvoice().isPaid()) {
+            btnPay.setVisibility(Button.GONE);
+        } else {
+            tvPaid.setVisibility(TextView.GONE);
+        }
 
         return convertView;
     }

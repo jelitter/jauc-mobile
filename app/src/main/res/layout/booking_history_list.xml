@@ -3,31 +3,46 @@
     android:id="@+id/booking_history_booking_element"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvBookingDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date: "
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvBookingOrigin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Origin: "
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+        <TextView
+            android:id="@+id/tvBookingDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date: "
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
-    <TextView
-        android:id="@+id/tvBookingDestination"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Destination "
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+        <TextView
+            android:id="@+id/tvBookingDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destination: "
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
-    <TextView
-        android:id="@+id/tvBookingPaid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Paid? Y/N"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+        <TextView
+            android:id="@+id/tvBookingOrigin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Origin: "
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        <TextView
+            android:id="@+id/tvBookingPaid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Paid? Y/N"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        <Button
+            android:id="@+id/btnPayInvoice"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PAY"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
+    </LinearLayout>
+
 </LinearLayout>
