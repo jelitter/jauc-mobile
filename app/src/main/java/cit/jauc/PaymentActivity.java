@@ -2,6 +2,7 @@ package cit.jauc;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +22,9 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import cit.jauc.lib.CoordsConverter;
 import cit.jauc.lib.HttpHandler;
+import cit.jauc.model.Booking;
 import cit.jauc.model.Invoice;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -34,6 +37,9 @@ public class PaymentActivity extends AppCompatActivity {
     TextView txtAmount;
     TextView txtTripDetails;
     Invoice invoice;
+    Booking booking;
+    String userId;
+    String customerEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +47,13 @@ public class PaymentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sharedpreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
         invoice = (Invoice) getIntent().getSerializableExtra("invoice");
+        booking = (Booking) getIntent().getSerializableExtra("booking");
+        userId = sharedpreferences.getString("userId", booking.getUserId());
+        customerEmail = sharedpreferences.getString("userEmail", "group.project@gmail.com");
+
         txtInvoiceId = findViewById(R.id.txtPaymentInvoice);
         txtAmount = findViewById(R.id.txtPaymentAmount);
         txtTripDetails = findViewById(R.id.txtPaymentTrip);
@@ -69,6 +80,15 @@ public class PaymentActivity extends AppCompatActivity {
                 new StripePaymentWorkflow().execute(invoice);
             }
         });
+
+        btnPayNewCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), UserProfileActivity.class);
+                i.putExtra("User", userId);
+                startActivity(i);
+            }
+        });
     }
 
     private class StripePaymentWorkflow extends AsyncTask<Object, Integer, String> {
@@ -89,14 +109,33 @@ public class PaymentActivity extends AppCompatActivity {
         protected String doInBackground(Object... params) {
             String resultAsyncTask = "";
             String customerToken = "";
-            // TODO get token from database
             JSONObject stripeQuery = new JSONObject();
             Invoice inv = (Invoice) params[0];
+            try {
+                String userInfo = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + userId + ".json", TAG);
+                JSONObject json = new JSONObject(userInfo);
+                if (json.has("customerToken")) {
+                    customerToken = json.getString("customerToken");
+                } else {
+                    return null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             try {
-                stripeQuery.put("amount", inv.getPrice());
-                stripeQuery.put("description", inv.getDescription());
-                stripeQuery.put("stripeCustomer", customerToken );
+                stripeQuery.put("amount", inv.getPrice() * 100);
+                String description;
+                if (inv.getDescription().equalsIgnoreCase("")) {
+                    description = "Trip to: " + CoordsConverter.getLocationfromCoords(booking.getDestination());
+                } else {
+                    description = inv.getDescription();
+                }
+                stripeQuery.put("description", description);
+                stripeQuery.put("stripeCustomer", customerToken);
+                stripeQuery.put("emailReceipt", customerEmail);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -108,6 +147,16 @@ public class PaymentActivity extends AppCompatActivity {
             }
 
             if (resultAsyncTask.length() > 0) {
+                JSONObject updateQuery = new JSONObject();
+                try {
+                    updateQuery.put("paid", true);
+                    updateQuery.put("stripeDebugString", resultAsyncTask);
+                    new HttpHandler().makeHttpPatchRequest(updateQuery.toString(), Constants.INVOICESURL + "/" + invoice.getId() + ".json", TAG);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 return resultAsyncTask;
             }
             return null;
@@ -119,8 +168,12 @@ public class PaymentActivity extends AppCompatActivity {
 
             progressDialog.dismiss();
 
-            Toast.makeText(PaymentActivity.this, "Result " + result,
-                    Toast.LENGTH_SHORT).show();
+            if(result != null) {
+                Toast.makeText(getApplicationContext(), "Payment successful.",
+                        Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
         }
 
         @Override

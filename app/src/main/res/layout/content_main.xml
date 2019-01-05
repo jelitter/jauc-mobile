@@ -16,24 +16,24 @@
       android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_user_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User Profile" />
-
-    <Button
         android:id="@+id/btn_booking_history"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:text="Booking History" />
 
     <Button
+        android:id="@+id/btn_user_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Profile" />
+
+    <Button
         android:id="@+id/logout_test"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:text="Logout Test" />
+        android:text="Logout" />
   </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

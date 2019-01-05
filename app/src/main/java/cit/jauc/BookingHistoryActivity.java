@@ -42,6 +42,24 @@ public class BookingHistoryActivity extends AppCompatActivity {
     String username;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        new GetBookingList().execute(username);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        new GetBookingList().execute(username);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new GetBookingList().execute(username);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_history);
@@ -60,7 +78,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-        new GetBookingList().execute(username);
+        // new GetBookingList().execute(username);
     }
 
 

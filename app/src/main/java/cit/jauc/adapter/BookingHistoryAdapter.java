@@ -52,6 +52,7 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), PaymentActivity.class);
+                i.putExtra("booking", booking);
                 i.putExtra("invoice", booking.getInvoice());
                 v.getContext().startActivity(i);
             }
