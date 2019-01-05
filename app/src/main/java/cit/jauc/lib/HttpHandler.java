@@ -24,8 +24,8 @@ public class HttpHandler {
             URL url = new URL(requestUrl);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(15000);
+            connection.setReadTimeout(5000);
+            connection.setConnectTimeout(5000);
             connection.connect();
 
             if (connection.getResponseCode() == 200) {
