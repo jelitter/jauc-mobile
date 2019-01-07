@@ -38,7 +38,7 @@
     <TextView
         android:id="@+id/tv_origin"
         android:layout_width="0dp"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -47,7 +47,7 @@
         android:textColor="#000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_originTitle" />
 
@@ -68,7 +68,7 @@
     <TextView
         android:id="@+id/tv_destination"
         android:layout_width="0dp"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -79,8 +79,10 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/bt_confirm"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_destinationTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_destinationTitle"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/bt_confirm"
