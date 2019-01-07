@@ -35,7 +35,7 @@ public class Booking implements Serializable {
         this.origin = origin;
     }
 
-    public void setOrigin(long longitude, long latitude) {
+    public void setOrigin(double longitude, double latitude) {
         this.origin.setLon(longitude);
         this.origin.setLat(latitude);
     }
@@ -48,7 +48,7 @@ public class Booking implements Serializable {
         this.destination = destination;
     }
 
-    public void setDestination(long longitude, long latitude) {
+    public void setDestination(double longitude, double latitude) {
         this.destination.setLon(longitude);
         this.destination.setLat(latitude);
     }

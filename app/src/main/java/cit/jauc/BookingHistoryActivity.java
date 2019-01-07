@@ -158,13 +158,13 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             }
 
                             JSONObject origin = element.has("origin") ? element.getJSONObject("origin") : null;
-                            long originLon = origin.getLong("lon");
-                            long originLat = origin.getLong("lat");
+                            double originLon = origin.getDouble("lon");
+                            double originLat = origin.getDouble("lat");
                             booking.setOrigin(originLon, originLat);
 
                             JSONObject destination = element.has("destination") ? element.getJSONObject("destination") : null;
-                            long destinationLon = destination.getLong("lon");
-                            long destinationLat = destination.getLong("lat");
+                            double destinationLon = destination.getDouble("lon");
+                            double destinationLat = destination.getDouble("lat");
                             booking.setDestination(destinationLon, destinationLat);
 
                             String dateStr = element.has("destination") ? element.getString("date") : null;
