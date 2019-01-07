@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import cit.jauc.lib.CoordsConverter;
 import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Invoice;
@@ -129,7 +128,7 @@ public class PaymentActivity extends AppCompatActivity {
                 stripeQuery.put("amount", inv.getPrice() * 100);
                 String description;
                 if (inv.getDescription().equalsIgnoreCase("")) {
-                    description = "Trip to: " + CoordsConverter.getLocationfromCoords(booking.getDestination());
+                    description = "Trip to: " + booking.getDestination().getAddress();
                 } else {
                     description = inv.getDescription();
                 }

@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import cit.jauc.PaymentActivity;
 import cit.jauc.R;
-import cit.jauc.lib.CoordsConverter;
 import cit.jauc.model.Booking;
 
 public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
@@ -42,8 +41,8 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
         tvPaid = convertView.findViewById(R.id.tvBookingPaid);
         btnPay = convertView.findViewById(R.id.btnPayInvoice);
 
-        tvOrigin.setText("Origin: " + CoordsConverter.getLocationfromCoords(booking.getOrigin().getLon(), booking.getOrigin().getLat()));
-        tvDestination.setText("Destination: " + CoordsConverter.getLocationfromCoords(booking.getDestination().getLon(), booking.getDestination().getLat()));
+        tvOrigin.setText("Origin: " + booking.getOrigin().getAddress());
+        tvDestination.setText("Destination: " + booking.getDestination().getAddress());
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         tvDate.setText(df.format(booking.getBookingDate()));
         tvPaid.setText((booking.getInvoice().isPaid() ? "PAID with Invoice #" + booking.getInvoice().getId() : "Not Yet Paid"));

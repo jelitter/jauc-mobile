@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cit.jauc.adapter.BookingHistoryAdapter;
+import cit.jauc.lib.CoordsConverter;
 import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Car;
@@ -160,12 +161,14 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             JSONObject origin = element.has("origin") ? element.getJSONObject("origin") : null;
                             double originLon = origin.getDouble("lon");
                             double originLat = origin.getDouble("lat");
-                            booking.setOrigin(originLon, originLat);
+                            String originAddr = (origin.has("address")) ? origin.getString("address") : CoordsConverter.getLocationfromCoords(originLon, originLat);
+                            booking.setOrigin(originLon, originLat, originAddr);
 
                             JSONObject destination = element.has("destination") ? element.getJSONObject("destination") : null;
                             double destinationLon = destination.getDouble("lon");
                             double destinationLat = destination.getDouble("lat");
-                            booking.setDestination(destinationLon, destinationLat);
+                            String destinationAddr = (destination.has("address")) ? destination.getString("address") : CoordsConverter.getLocationfromCoords(destinationLon, destinationLat);
+                            booking.setDestination(destinationLon, destinationLat, destinationAddr);
 
                             String dateStr = element.has("destination") ? element.getString("date") : null;
                             if (dateStr != null) {

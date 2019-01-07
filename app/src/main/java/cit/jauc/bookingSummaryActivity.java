@@ -129,8 +129,10 @@ public class bookingSummaryActivity extends AppCompatActivity {
                 query.put("userName", mAuth.getCurrentUser().getDisplayName());
                 originQuery.put("lat", userBooking.getOrigin().getLat());
                 originQuery.put("lon", userBooking.getOrigin().getLon());
+                originQuery.put("address", originAddress);
                 destinationQuery.put("lat", userBooking.getDestination().getLat());
                 destinationQuery.put("lon", userBooking.getDestination().getLon());
+                destinationQuery.put("address", destinationAddress);
                 query.put("destination", destinationQuery);
                 query.put("origin", originQuery);
 

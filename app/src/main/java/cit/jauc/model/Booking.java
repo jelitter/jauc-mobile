@@ -40,6 +40,12 @@ public class Booking implements Serializable {
         this.origin.setLat(latitude);
     }
 
+    public void setOrigin(double longitude, double latitude, String address) {
+        this.origin.setLon(longitude);
+        this.origin.setLat(latitude);
+        this.origin.setAddress(address);
+    }
+
     public Location getDestination() {
         return destination;
     }
@@ -51,6 +57,12 @@ public class Booking implements Serializable {
     public void setDestination(double longitude, double latitude) {
         this.destination.setLon(longitude);
         this.destination.setLat(latitude);
+    }
+
+    public void setDestination(double longitude, double latitude, String address) {
+        this.destination.setLon(longitude);
+        this.destination.setLat(latitude);
+        this.destination.setAddress(address);
     }
 
 

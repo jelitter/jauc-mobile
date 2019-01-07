@@ -6,6 +6,9 @@ public class Location implements Serializable {
     private double lon;
     private double lat;
 
+
+    private String address;
+
     public Location() {
 
     }
@@ -32,4 +35,11 @@ public class Location implements Serializable {
     }
 
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }
