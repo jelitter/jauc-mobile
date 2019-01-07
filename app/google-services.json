@@ -47,6 +47,14 @@
           }
         },
         {
+          "client_id": "491744035196-1b4sgpvi6gh1g2v23d5m50ufnrlisabp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cit.jauc",
+            "certificate_hash": "bf6a5a164b47e21670f09c814e6a79762e8b27da"
+          }
+        },
+        {
           "client_id": "491744035196-3tvo0r4d05b1mq7m16s9597f7tsceggf.apps.googleusercontent.com",
           "client_type": 3
         }
