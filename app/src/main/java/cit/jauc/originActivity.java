@@ -57,6 +57,7 @@ public class originActivity extends AppCompatActivity implements
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
         userLocation = new cit.jauc.model.Location();
         retrieveLocation(userLocation);
 
@@ -67,12 +68,14 @@ public class originActivity extends AppCompatActivity implements
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
         goToPickerActivity();
 
     }
 
 
     private void goToPickerActivity() {
+
         startActivityForResult(
                 new PlacePicker.IntentBuilder()
                         .accessToken(getString(R.string.mapbox_access_token))
