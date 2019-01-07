@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="mapboxGreen">#7fc57f</color>
+    <color name="colorPrimary">#79CCCD</color>
+    <color name="colorPrimaryDark">#80CBC4</color>
+    <color name="colorAccent">#007B76</color>
+    <color name="mapboxGreen">#007B76</color>
+    <color name="surface">#E0F2F1</color>
+    <color name="stdButton">#004F48</color>
+
 </resources>
