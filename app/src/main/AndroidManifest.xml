@@ -79,10 +79,18 @@
             android:name=".BookingDetailsActivity"
             android:label="@string/title_activity_booking_details"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".originActivity" />
         <activity android:name=".destinationActivity" />
         <activity android:name=".bookingConfirmedActivity" />
-        <activity android:name=".bookingSummaryActivity"></activity>
+        <activity
+            android:name=".UserProfileActivity"
+            android:label="@string/title_activity_user_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PaymentActivity"
+            android:label="@string/title_activity_payment"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

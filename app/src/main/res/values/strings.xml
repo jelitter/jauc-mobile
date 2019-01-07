@@ -25,5 +25,7 @@
     <string name="user_location_permission_not_granted">Unable to locate automatically your position</string>
     <string name="selected_place_info">Address selected</string>
     <string name="go_to_picker_activity">Address Picker</string>
+    <string name="title_activity_user_profile">User Profile</string>
+    <string name="title_activity_payment">Invoice Payment</string>
 
 </resources>

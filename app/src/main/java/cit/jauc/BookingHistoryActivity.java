@@ -1,5 +1,6 @@
 package cit.jauc;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cit.jauc.adapter.BookingHistoryAdapter;
-import cit.jauc.lib.HttpFirebaseHandler;
+import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Car;
 import cit.jauc.model.Invoice;
@@ -39,6 +40,24 @@ public class BookingHistoryActivity extends AppCompatActivity {
     ListView listView;
     Context activity;
     String username;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new GetBookingList().execute(username);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        new GetBookingList().execute(username);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new GetBookingList().execute(username);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +78,28 @@ public class BookingHistoryActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-        new GetBookingList().execute(username);
+        // new GetBookingList().execute(username);
     }
 
 
     private class GetBookingList extends AsyncTask<String, Integer, List<Booking>> {
+        ProgressDialog progressDialog = new ProgressDialog(BookingHistoryActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Loading trip history...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
 
         @Override
         protected List<Booking> doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpGetRequest(Constants.BOOKINGSURL + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.BOOKINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
@@ -98,7 +128,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             booking.setCarId(carId);
                             if (carId != null) {
                                 try {
-                                    String carResult = new HttpFirebaseHandler().makeHttpGetRequest(Constants.CARSURL + "/" + carId + ".json", TAG);
+                                    String carResult = new HttpHandler().makeHttpGetRequest(Constants.CARSURL + "/" + carId + ".json", TAG);
                                     JSONObject carJson = new JSONObject(carResult);
                                     Car car = new Car();
                                     car.setId(carId);
@@ -114,12 +144,13 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             booking.setInvoice(invoiceId);
                             if (invoiceId != null) {
                                 try {
-                                    String invoiceResult = new HttpFirebaseHandler().makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json", TAG);
+                                    String invoiceResult = new HttpHandler().makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json", TAG);
                                     JSONObject invoiceJson = new JSONObject(invoiceResult);
                                     Invoice invoice = new Invoice();
                                     invoice.setId(invoiceId);
                                     invoice.setPaid(invoiceJson.has("paid") && invoiceJson.getBoolean("paid"));
                                     invoice.setPrice((invoiceJson.has("price") ? invoiceJson.getDouble("price") : -1));
+                                    invoice.setDescription((invoiceJson.has("description")) ? invoiceJson.getString("description") : "");
                                     booking.setInvoice(invoice);
                                 } catch (IOException e) {
                                     Log.w(TAG, "unableToGetInvoiceResult:failure", e);
@@ -171,6 +202,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
                     view.getContext().startActivity(i);
                 }
             });
+            progressDialog.dismiss();
         }
 
         @Override
