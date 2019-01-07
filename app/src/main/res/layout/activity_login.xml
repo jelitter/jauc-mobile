@@ -21,67 +21,69 @@
     android:layout_marginBottom="8dp"
     android:visibility="gone"/>
 
-  <ScrollView
-    android:id="@+id/login_form"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
-
-    <LinearLayout
-      android:id="@+id/email_login_form"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
-
-      <android.support.design.widget.TextInputLayout
+    <ScrollView
+        android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
-        <AutoCompleteTextView
-          android:id="@+id/et_email"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/prompt_email"
-          android:inputType="textEmailAddress"
-          android:maxLines="1"
-          android:singleLine="true"/>
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-      </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-      <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                <AutoCompleteTextView
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-        <EditText
-          android:id="@+id/et_password"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/prompt_password"
-          android:imeActionId="6"
-          android:imeActionLabel="@string/action_sign_in_short"
-          android:imeOptions="actionUnspecified"
-          android:inputType="textPassword"
-          android:maxLines="1"
-          android:singleLine="true"/>
+            </android.support.design.widget.TextInputLayout>
 
-      </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-      <Button
-        android:id="@+id/email_sign_in_button"
-        style="?android:textAppearanceSmall"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/action_sign_in"/>
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_password"
+                    android:imeActionId="6"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-      <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
+            </android.support.design.widget.TextInputLayout>
 
-      <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            <Button
+                android:id="@+id/email_sign_in_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_sign_in"
+                android:textStyle="bold" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/googleBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
+
+            <!--<com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/twitterBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -94,8 +96,8 @@
           android:paddingLeft="8dp"
           android:paddingTop="12dp"
           android:paddingRight="8dp"
-          android:paddingBottom="12dp" />
+          android:paddingBottom="12dp" />-->
 
-    </LinearLayout>
-  </ScrollView>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
