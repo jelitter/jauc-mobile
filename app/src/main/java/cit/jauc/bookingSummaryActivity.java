@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-import cit.jauc.lib.HttpFirebaseHandler;
+import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Location;
 
@@ -134,7 +134,7 @@ public class bookingSummaryActivity extends AppCompatActivity {
             }
 
             try {
-                resultAsyncTask = new HttpFirebaseHandler().makeHttpPostRequest(query.toString(), Constants.BOOKINGSURL + ".json", TAG);
+                resultAsyncTask = new HttpHandler().makeHttpPostRequest(query.toString(), Constants.BOOKINGSURL + ".json", TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
