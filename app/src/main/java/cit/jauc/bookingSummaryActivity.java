@@ -160,4 +160,10 @@ public class bookingSummaryActivity extends AppCompatActivity {
             super.onProgressUpdate(values);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent backIntent = new Intent(getBaseContext(), destinationActivity.class);
+        startActivity(backIntent);
+    }
 }

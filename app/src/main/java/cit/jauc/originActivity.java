@@ -243,4 +243,10 @@ public class originActivity extends AppCompatActivity implements
         super.onLowMemory();
         mapView.onLowMemory();
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent backIntent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(backIntent);
+    }
 }
