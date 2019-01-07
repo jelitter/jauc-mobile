@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Failed sign in", Toast.LENGTH_LONG)
-                                        .show();
+                                                .show();
                                     } else {
                                         Toast.makeText(LoginActivity.this, "Signed in", Toast.LENGTH_LONG)
                                                 .show();

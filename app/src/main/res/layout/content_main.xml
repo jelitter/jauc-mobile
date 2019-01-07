@@ -27,7 +27,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="User Profile" />
-
+  <Button
+      android:id="@+id/btn_book"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Book a Trip"
+ />
+    
     <Button
         android:id="@+id/logout_test"
         android:layout_width="match_parent"
