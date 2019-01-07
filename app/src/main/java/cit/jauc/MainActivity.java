@@ -64,7 +64,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         sharedpreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+            FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,15 +113,11 @@ public class MainActivity extends AppCompatActivity {
         btnBook.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
+
                     Intent intentBook = new Intent(getBaseContext(), originActivity.class);
                     intentBook.putExtra("User", mAuth.getCurrentUser().getUid());
                     startActivity(intentBook);
-                } else {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    return;
-                }
+
             }
         });
 

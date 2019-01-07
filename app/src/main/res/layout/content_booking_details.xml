@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".BookingDetailsActivity"
-    tools:showIn="@layout/activity_booking_details">
+    tools:showIn="@layout/activity_booking_details"
+    android:background="@color/surface">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -63,6 +64,7 @@
             <Button
                 android:id="@+id/btnRatingHappy"
                 style="@style/Widget.MaterialComponents.Button.Icon"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
