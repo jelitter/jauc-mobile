@@ -1,14 +1,18 @@
 package cit.jauc;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -117,9 +121,15 @@ public class MainActivity extends AppCompatActivity {
         btnBook.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentBook = new Intent(getBaseContext(), originActivity.class);
-                intentBook.putExtra("User", mAuth.getCurrentUser().getUid());
-                startActivity(intentBook);
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Intent intentBook = new Intent(getBaseContext(), originActivity.class);
+                    intentBook.putExtra("User", mAuth.getCurrentUser().getUid());
+                    startActivity(intentBook);
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    return;
+                }
             }
         });
 
@@ -231,4 +241,6 @@ public class MainActivity extends AppCompatActivity {
             super.onProgressUpdate(values);
         }
     }
+
+
 }
