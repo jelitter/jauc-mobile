@@ -12,8 +12,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookButtonBase;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -77,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
         googleButton = findViewById(R.id.googleBtn);
         twitterButton = findViewById(R.id.twitterBtn);
         facebookButton = findViewById(R.id.facebookBtn);
+        twitterButton.setVisibility(TwitterLoginButton.GONE);
+        facebookButton.setVisibility(FacebookButtonBase.GONE);
 
         login_et_email = findViewById(R.id.et_email);
         login_et_password = findViewById(R.id.et_password);
