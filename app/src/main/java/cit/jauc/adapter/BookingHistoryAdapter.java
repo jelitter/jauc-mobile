@@ -57,6 +57,10 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
             }
         });
 
+        if (booking.getInvoice().getId() == null) {
+            btnPay.setVisibility(Button.GONE);
+            tvPaid.setVisibility(TextView.GONE);
+        }
         if(booking.getInvoice().isPaid()) {
             btnPay.setVisibility(Button.GONE);
         } else {
