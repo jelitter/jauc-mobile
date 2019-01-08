@@ -14,8 +14,8 @@
     completions."
   </string>
     <string name="title_activity_main">JAUC</string>
-    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">5ERcxyb564xBJ6l7LjkO6Vu6z</string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">5ERcxyb564xBJ6l7LjkO6Vu6z</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">Xe6aMSkHDbGbT69upEW8QNszNM8IRXGa336RRW2nqfqETKaQ7j</string>
     <string name="facebook_app_id">299312787461447</string>
     <string name="fb_login_protocol_scheme">fb299312787461447</string>
     <string name="title_activity_booking_history">Trip History</string>
@@ -27,5 +27,6 @@
     <string name="go_to_picker_activity">Address Picker</string>
     <string name="title_activity_user_profile">User Profile</string>
     <string name="title_activity_payment">Invoice Payment</string>
+    <string name="title_main_activity">Welcome to JAUC</string>
 
 </resources>

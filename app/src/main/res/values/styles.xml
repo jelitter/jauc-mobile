@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="surface">@color/surface</item>-->
+        <!--<item name="colorSurface">@color/colorSurface</item>-->
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -23,9 +23,3 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
-
-
-
-<!--<color name="mapboxGreen">#007B76</color>-->
-<!--<color name="surface">#E0F2F1</color>-->
-<!--<color name="stdButton">#004F48</color>-->
