@@ -59,6 +59,8 @@ public class PaymentActivity extends AppCompatActivity {
         btnPayNewCard = findViewById(R.id.btnPayNew);
         btnPayStoredCard = findViewById(R.id.btnPayToken);
 
+        txtTripDetails.setText("Trip " + ((booking.getOrigin().getAddress().length() > 4) ? "from " + booking.getOrigin().getAddress() : "")
+                + ((booking.getDestination().getAddress().length() >4 ) ? " To " + booking.getDestination().getAddress() : ""));
         txtInvoiceId.setText(invoice.getId());
         Locale locale = new Locale("en", "IE");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
