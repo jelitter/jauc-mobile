@@ -17,17 +17,17 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <TextView
-            android:id="@+id/tvBookingDestination"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Destination: "
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
-
-        <TextView
             android:id="@+id/tvBookingOrigin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Origin: "
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        <TextView
+            android:id="@+id/tvBookingDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destination: "
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <TextView

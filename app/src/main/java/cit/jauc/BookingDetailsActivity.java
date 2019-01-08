@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
-import cit.jauc.lib.CoordsConverter;
 import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Rating;
@@ -58,8 +57,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
         btnRatingAngry = findViewById(R.id.btnRatingAngry);
 
 
-        txFrom.setText("Origin: " + CoordsConverter.getLocationfromCoords(booking.getOrigin().getLon(), booking.getOrigin().getLat()));
-        txTo.setText("Destination: " + CoordsConverter.getLocationfromCoords(booking.getDestination().getLon(), booking.getDestination().getLat()));
+        txFrom.setText("Origin: " + booking.getOrigin().getAddress());
+        txTo.setText("Destination: " + booking.getDestination().getAddress());
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         txDate.setText(df.format(booking.getBookingDate()));
         if (booking.getCar() != null) {

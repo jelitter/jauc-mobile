@@ -1,6 +1,5 @@
 package cit.jauc;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,15 +9,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.stripe.android.Stripe;
+import com.google.firebase.auth.FirebaseAuth;
 import com.stripe.android.SourceCallback;
+import com.stripe.android.Stripe;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Source;
 import com.stripe.android.model.SourceParams;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import cit.jauc.lib.HttpHandler;
-import cit.jauc.model.User;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -160,7 +158,8 @@ public class UserProfileActivity extends AppCompatActivity {
             String resultAsyncTask = "";
             String customerToken = "";
             JSONObject stripeQuery = new JSONObject();
-            String userId = params[0];
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            String userId = mAuth.getCurrentUser().getUid();
             String userEmail = params[1];
             String cardToken = params[2];
             try {
