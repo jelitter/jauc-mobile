@@ -146,12 +146,15 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             if (invoiceId != null) {
                                 try {
                                     String invoiceResult = new HttpHandler().makeHttpGetRequest(Constants.INVOICESURL + "/" + invoiceId + ".json", TAG);
-                                    JSONObject invoiceJson = new JSONObject(invoiceResult);
                                     Invoice invoice = new Invoice();
                                     invoice.setId(invoiceId);
-                                    invoice.setPaid(invoiceJson.has("paid") && invoiceJson.getBoolean("paid"));
-                                    invoice.setPrice((invoiceJson.has("price") ? invoiceJson.getDouble("price") : -1));
-                                    invoice.setDescription((invoiceJson.has("description")) ? invoiceJson.getString("description") : "");
+                                    if(invoiceResult.length() > 0) {
+                                        JSONObject invoiceJson = new JSONObject(invoiceResult);
+                                        invoice.setPaid(invoiceJson.has("paid") && invoiceJson.getBoolean("paid"));
+                                        invoice.setPrice((invoiceJson.has("price") ? invoiceJson.getDouble("price") : -1));
+                                        invoice.setDescription((invoiceJson.has("description")) ? invoiceJson.getString("description") : "");
+
+                                    }
                                     booking.setInvoice(invoice);
                                 } catch (IOException e) {
                                     Log.w(TAG, "unableToGetInvoiceResult:failure", e);
