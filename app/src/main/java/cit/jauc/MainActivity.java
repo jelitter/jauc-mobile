@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -34,20 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 
-import cit.jauc.adapter.BookingHistoryAdapter;
 import cit.jauc.lib.HttpHandler;
-import cit.jauc.model.Booking;
-import cit.jauc.model.Car;
-import cit.jauc.model.Invoice;
 import cit.jauc.model.StripeCustomer;
 import cit.jauc.model.User;
 
@@ -77,7 +64,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         sharedpreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+            FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,15 +113,11 @@ public class MainActivity extends AppCompatActivity {
         btnBook.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
+
                     Intent intentBook = new Intent(getBaseContext(), originActivity.class);
                     intentBook.putExtra("User", mAuth.getCurrentUser().getUid());
                     startActivity(intentBook);
-                } else {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    return;
-                }
+
             }
         });
 
@@ -191,8 +179,25 @@ public class MainActivity extends AppCompatActivity {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
 
-            if (resultAsyncTask.length() > 0) {
+            if (resultAsyncTask.length() > 0 && !resultAsyncTask.equalsIgnoreCase("null")) {
                 return convertJsonToUser(resultAsyncTask, user[0]);
+            } else {
+                try {
+                    JSONObject userQuery = new JSONObject();
+                    if (mAuth.getCurrentUser().getDisplayName() != null) {
+                        userQuery.put("displayName", mAuth.getCurrentUser().getDisplayName());
+                    }
+                    if (mAuth.getCurrentUser().getPhotoUrl() != null) {
+                        userQuery.put("photoUrl", mAuth.getCurrentUser().getPhotoUrl());
+                    }
+                    userQuery.put("key", mAuth.getCurrentUser().getUid());
+                    userQuery.put("email", mAuth.getCurrentUser().getEmail());
+                    return convertJsonToUser(new HttpHandler().makeHttpPatchRequest(userQuery.toString(), Constants.USERURL + "/" + mAuth.getCurrentUser().getUid() + ".json", TAG), user[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }

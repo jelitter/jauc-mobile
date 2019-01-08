@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/booking_history_booking_element"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/surface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,17 +17,17 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <TextView
-            android:id="@+id/tvBookingDestination"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Destination: "
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
-
-        <TextView
             android:id="@+id/tvBookingOrigin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Origin: "
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        <TextView
+            android:id="@+id/tvBookingDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destination: "
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <TextView

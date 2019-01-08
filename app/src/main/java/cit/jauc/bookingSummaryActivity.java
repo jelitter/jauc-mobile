@@ -2,8 +2,8 @@ package cit.jauc;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +16,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
@@ -117,15 +120,19 @@ public class bookingSummaryActivity extends AppCompatActivity {
             JSONObject destinationQuery = new JSONObject();
 
             Date currentTime = Calendar.getInstance().getTime();
+            DateFormat df = new SimpleDateFormat("EEE MMM d yyyy HH:mm:ss Z", Locale.ENGLISH);
+            String strDate = df.format(currentTime);
 
             try {
-                query.put("date", currentTime);
+                query.put("date", strDate);
                 query.put("userId", userBooking.getUserId());
                 query.put("userName", mAuth.getCurrentUser().getDisplayName());
                 originQuery.put("lat", userBooking.getOrigin().getLat());
                 originQuery.put("lon", userBooking.getOrigin().getLon());
+                originQuery.put("address", originAddress);
                 destinationQuery.put("lat", userBooking.getDestination().getLat());
                 destinationQuery.put("lon", userBooking.getDestination().getLon());
+                destinationQuery.put("address", destinationAddress);
                 query.put("destination", destinationQuery);
                 query.put("origin", originQuery);
 

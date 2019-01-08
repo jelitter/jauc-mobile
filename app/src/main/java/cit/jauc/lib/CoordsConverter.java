@@ -1,12 +1,13 @@
 package cit.jauc.lib;
 
+import java.text.DecimalFormat;
+
 import cit.jauc.model.Location;
 
 public class CoordsConverter {
 
     public static String getLocationfromCoords(double longitude, double latitude) {
-        // TODO API Call to get location from coords
-        return "Location " + longitude + "," + latitude;
+        return "Location " + new DecimalFormat("#.00").format(longitude) + "," + new DecimalFormat("#.00").format(latitude);
     }
 
     public static String getLocationfromCoords(Location location) {

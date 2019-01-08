@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cit.jauc.adapter.BookingHistoryAdapter;
+import cit.jauc.lib.CoordsConverter;
 import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Car;
@@ -158,14 +159,16 @@ public class BookingHistoryActivity extends AppCompatActivity {
                             }
 
                             JSONObject origin = element.has("origin") ? element.getJSONObject("origin") : null;
-                            long originLon = origin.getLong("lon");
-                            long originLat = origin.getLong("lat");
-                            booking.setOrigin(originLon, originLat);
+                            double originLon = origin.getDouble("lon");
+                            double originLat = origin.getDouble("lat");
+                            String originAddr = (origin.has("address")) ? origin.getString("address") : CoordsConverter.getLocationfromCoords(originLon, originLat);
+                            booking.setOrigin(originLon, originLat, originAddr);
 
                             JSONObject destination = element.has("destination") ? element.getJSONObject("destination") : null;
-                            long destinationLon = destination.getLong("lon");
-                            long destinationLat = destination.getLong("lat");
-                            booking.setDestination(destinationLon, destinationLat);
+                            double destinationLon = destination.getDouble("lon");
+                            double destinationLat = destination.getDouble("lat");
+                            String destinationAddr = (destination.has("address")) ? destination.getString("address") : CoordsConverter.getLocationfromCoords(destinationLon, destinationLat);
+                            booking.setDestination(destinationLon, destinationLat, destinationAddr);
 
                             String dateStr = element.has("destination") ? element.getString("date") : null;
                             if (dateStr != null) {

@@ -1,5 +1,6 @@
 package cit.jauc;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,8 +12,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookButtonBase;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -54,10 +57,19 @@ public class LoginActivity extends AppCompatActivity {
     private EditText login_et_email;
     private EditText login_et_password;
     private Button login_btn_email;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Attempting to login...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(true);
+
+
 
         // Initialize Twitter SDK
         Twitter.initialize(this);
@@ -67,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
         googleButton = findViewById(R.id.googleBtn);
         twitterButton = findViewById(R.id.twitterBtn);
         facebookButton = findViewById(R.id.facebookBtn);
+        twitterButton.setVisibility(TwitterLoginButton.GONE);
+        facebookButton.setVisibility(FacebookButtonBase.GONE);
 
         login_et_email = findViewById(R.id.et_email);
         login_et_password = findViewById(R.id.et_password);
@@ -184,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void updateUI(FirebaseUser currentUser) {
-
+        progressDialog.dismiss();
     }
 
 
@@ -196,6 +210,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        progressDialog.show();
 
         // Pass the activity result to the Twitter login button.
         twitterButton.onActivityResult(requestCode, resultCode, data);
