@@ -3,6 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:background="@color/surface"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -10,11 +11,34 @@
   tools:showIn="@layout/activity_main">
 
   <LinearLayout
+      android:id="@+id/linearLayout3"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:background="@color/surface"
-      android:orientation="vertical">
+      android:layout_height="358dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="32dp"
+      android:layout_marginRight="32dp"
+      android:layout_marginBottom="8dp"
+      android:gravity="top|center"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+    <TextView
+        android:id="@+id/menuTitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Welcome to JAUC"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:fontFamily="serif"
+        tools:text="Welcome to JAUC" />
 
     <Button
         android:id="@+id/btn_booking_history"
@@ -28,19 +52,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="User Profile" />
-  <Button
-      android:id="@+id/btn_book"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="Book a Trip"
- />
-    
+
+    <Button
+        android:id="@+id/btn_book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Book a Trip" />
+
+    <Button
+        android:id="@+id/support_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Support" />
+
     <Button
         android:id="@+id/logout_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:text="Logout" />
+
   </LinearLayout>
+
+  <ImageView
+      android:id="@+id/imageView"
+      android:layout_width="128dp"
+      android:layout_height="128dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="32dp"
+      android:layout_marginRight="32dp"
+      android:layout_marginBottom="8dp"
+      android:background="@mipmap/ic_launcher_round"
+      app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@mipmap/ic_launcher"
+      tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 </android.support.constraint.ConstraintLayout>

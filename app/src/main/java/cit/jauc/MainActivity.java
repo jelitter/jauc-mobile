@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnOpenBookingHistory;
     Button btnBook;
     Button btnOpenUserProfile;
+    Button btnSupportRequest;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
     SharedPreferences sharedpreferences;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         btnOpenBookingHistory = findViewById(R.id.btn_booking_history);
         btnBook = findViewById(R.id.btn_book);
         btnOpenUserProfile = findViewById(R.id.btn_user_profile);
+        btnSupportRequest = findViewById(R.id.support_request);
         mAuth = FirebaseAuth.getInstance();
 
         button.setOnClickListener(new OnClickListener() {
@@ -118,6 +120,15 @@ public class MainActivity extends AppCompatActivity {
                     intentBook.putExtra("User", mAuth.getCurrentUser().getUid());
                     startActivity(intentBook);
 
+            }
+        });
+
+        btnSupportRequest.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSupport = new Intent(getBaseContext(), SupportHistoryActivity.class);
+                intentSupport.putExtra("User", mAuth.getCurrentUser().getUid());
+                startActivity(intentSupport);
             }
         });
 
