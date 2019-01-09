@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/booking_history_booking_element"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,20 +12,62 @@
         android:orientation="vertical"
         android:padding="15dp">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Title"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="fixed"
+                    android:text="Email"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textColor="@color/colorPrimaryDarker"
+                    android:textSize="12dp"
+                     />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDarker"
+                android:textStyle="italic"
+                android:text="Date"
+                android:textSize="12dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                />
+        </LinearLayout>
+
+
+
 
         <TextView
             android:id="@+id/tvBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:text=""
+            android:padding="22dp"
+            android:text="Body"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <LinearLayout
@@ -35,10 +78,11 @@
             <Button
                 android:id="@+id/btnResolve"
                 style="@style/Widget.MaterialComponents.Button"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:textSize="14dp"
                 android:background="@drawable/button_background"
                 android:text="Resolved"
                 android:textColor="@color/colorSurface" />
@@ -46,12 +90,12 @@
             <Button
                 android:id="@+id/btnRespond"
                 style="@style/Widget.MaterialComponents.Button"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Respond"
+                android:textSize="14dp"
                 android:background="@drawable/button_background"
                 android:textColor="@color/colorSurface" />
 
@@ -61,3 +105,5 @@
     </LinearLayout>
 
 </LinearLayout>
+
+    <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Button"-->
