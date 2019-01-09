@@ -9,7 +9,7 @@
   android:paddingLeft="@dimen/activity_horizontal_margin"
   android:paddingRight="@dimen/activity_horizontal_margin"
   android:gravity="center_horizontal"
-  android:background="@color/surface"
+  android:background="@color/colorSurface"
   android:orientation="vertical"
 
   tools:context=".LoginActivity">

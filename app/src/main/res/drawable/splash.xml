@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/colorPrimaryDark" />
+    <!--<item-->
+    <!--android:drawable="@drawable/jauc_icon"-->
+    <!--android:gravity="clip_vertical"-->
+    <!--android:scaleType="centerCrop"></item>-->
 
-  <item android:drawable="@color/colorPrimaryDark" />
+    <item
+        android:left="100dp"
+        android:right="100dp">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/jauc_icon" />
+    </item>
 
-<!--  <item>
-    <bitmap
-      android:gravity="center"
-      android:src="@mipmap/ic_launcher"/>
-  </item>-->
 
 </layer-list>

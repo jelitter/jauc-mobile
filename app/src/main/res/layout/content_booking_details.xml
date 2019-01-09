@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".BookingDetailsActivity"
     tools:showIn="@layout/activity_booking_details"
-    android:background="@color/surface">
+    android:background="@color/colorSurface">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
