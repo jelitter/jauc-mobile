@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".BookingHistoryActivity"
     tools:showIn="@layout/activity_booking_history"
-    android:background="@color/colorSurface">
+    android:background="@drawable/background">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorSurface"
         android:id="@+id/lv_booking_list"></ListView>
 
 </android.support.constraint.ConstraintLayout>
