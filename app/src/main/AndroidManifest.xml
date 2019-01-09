@@ -93,7 +93,7 @@
         <activity android:name=".bookingSummaryActivity" />
         <activity android:name=".SupportHistoryActivity"></activity>
 
-        <service android:name=".java.MyFirebaseMessagingService">
+        <service android:name=".adapter.JAUCFirebaseMessageService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
