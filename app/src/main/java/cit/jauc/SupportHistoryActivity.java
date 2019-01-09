@@ -18,15 +18,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import cit.jauc.adapter.BookingHistoryAdapter;
 import cit.jauc.adapter.SupportHistoryAdapter;
 import cit.jauc.lib.HttpHandler;
-import cit.jauc.model.Booking;
 import cit.jauc.model.SupportMessage;
 
 
@@ -37,42 +34,59 @@ public class SupportHistoryActivity extends AppCompatActivity {
     ArrayAdapter<SupportMessage> supportMessageArrayAdapter;
     ListView listView;
     Context activity;
-    String username;
+    String userId,email,displayName,photoUrl;
     private List<SupportMessage> messageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_history);
-
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
         activity = this;
 
         listView = findViewById(R.id.lv_support_list);
-        username = getIntent().getStringExtra("User");
+
+
+        Bundle extras = getIntent().getExtras();
+        userId = extras.getString("userId");
+        email = extras.getString("email");
+        displayName = extras.getString("displayName");
+        photoUrl = extras.getString("photoUrl");
+
 
         supportButton = findViewById(R.id.btnSendTicket);
-//        supportButton.setText(username);
+        supportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle extras = new Bundle();
+                extras.putString("userId",userId);
+                extras.putString("displayName",displayName);
+                extras.putString("email",email);
+                extras.putString("photoUrl", photoUrl);
+
+                Intent intentSupport = new Intent(getBaseContext(), SupportRequestActivity.class);
+                intentSupport.putExtras(extras);
+
+                startActivity(intentSupport);
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        new GetMessageList().execute(username);
+        new GetMessageList().execute(userId);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        new GetMessageList().execute(username);
+        new GetMessageList().execute(userId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        new GetMessageList().execute(username);
+        new GetMessageList().execute(userId);
     }
 
     private class GetMessageList extends AsyncTask<String, Integer, List<SupportMessage>> {

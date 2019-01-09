@@ -49,11 +49,14 @@ public class MainActivity extends AppCompatActivity {
     Button btnOpenBookingHistory;
     Button btnBook;
     Button btnOpenUserProfile;
-    Button btnSupportRequest;
+    Button btnSupportMain;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
     SharedPreferences sharedpreferences;
     String firebaseAppToken = "";
+
+    String userId, displayName, email, photoUrl;
+
 
     @Override
     protected void onStart() {
@@ -93,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        userId = mAuth.getCurrentUser().getUid();
+        displayName = mAuth.getCurrentUser().getDisplayName();
+        email = mAuth.getCurrentUser().getEmail();
+        photoUrl = mAuth.getCurrentUser().getPhotoUrl().toString();
     }
 
     @Override
@@ -121,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         btnOpenBookingHistory = findViewById(R.id.btn_booking_history);
         btnBook = findViewById(R.id.btn_book);
         btnOpenUserProfile = findViewById(R.id.btn_user_profile);
-        btnSupportRequest = findViewById(R.id.support_request);
+        btnSupportMain = findViewById(R.id.support_request);
         mAuth = FirebaseAuth.getInstance();
 
         button.setOnClickListener(new OnClickListener() {
@@ -161,11 +169,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnSupportRequest.setOnClickListener(new OnClickListener() {
+        btnSupportMain.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle extras = new Bundle();
+                extras.putString("userId",mAuth.getCurrentUser().getUid());
+                extras.putString("displayName",mAuth.getCurrentUser().getDisplayName());
+                extras.putString("email",mAuth.getCurrentUser().getEmail());
+                extras.putString("photoUrl", mAuth.getCurrentUser().getPhotoUrl().toString());
+
                 Intent intentSupport = new Intent(getBaseContext(), SupportHistoryActivity.class);
-                intentSupport.putExtra("User", mAuth.getCurrentUser().getUid());
+                intentSupport.putExtras(extras);
+
                 startActivity(intentSupport);
             }
         });
@@ -179,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        if(sharedpreferences.getString("userId", "").equalsIgnoreCase("")) {
+        if(sharedpreferences.getString("userId", "").equalsIgnoreCase("") || !sharedpreferences.getString("userId", "").equalsIgnoreCase(mAuth.getCurrentUser().getUid())) {
             new GetUserDetails().execute(mAuth.getCurrentUser().getUid());
         }
     }
@@ -223,7 +238,11 @@ public class MainActivity extends AppCompatActivity {
         protected User doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + user[0] + ".json", TAG);
+//                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + user[0] + ".json", TAG);
+
+                String url = Constants.USERURL + "/" + userId + ".json";
+
+                resultAsyncTask = new HttpHandler().makeHttpGetRequest(url, TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
