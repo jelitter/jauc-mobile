@@ -50,7 +50,7 @@ public class SupportRequestActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentSupport = new Intent(getBaseContext(), SupportHistoryActivity.class);
+                Intent intentSupport = new Intent(getBaseContext(), MainActivity.class);
                 tvBody.setText("");
                 intentSupport.putExtra("User", userId);
                 startActivity(intentSupport);
@@ -95,6 +95,7 @@ public class SupportRequestActivity extends AppCompatActivity {
                 query.put("email", message.getEmail());
                 query.put("photoUrl", message.getPhotoUrl());
                 query.put("body", message.getBody());
+                query.put("read", message.isRead());
 
 
             } catch (JSONException e) {

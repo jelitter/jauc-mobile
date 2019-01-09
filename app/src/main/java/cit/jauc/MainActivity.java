@@ -51,10 +51,18 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener mAuthListener;
     SharedPreferences sharedpreferences;
 
+    String userId, displayName, email, photoUrl;
+
+
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
+        userId = mAuth.getCurrentUser().getUid();
+        displayName = mAuth.getCurrentUser().getDisplayName();
+        email = mAuth.getCurrentUser().getEmail();
+        photoUrl = mAuth.getCurrentUser().getPhotoUrl().toString();
     }
 
     @Override
@@ -192,7 +200,11 @@ public class MainActivity extends AppCompatActivity {
         protected User doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + user[0] + ".json", TAG);
+//                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + user[0] + ".json", TAG);
+
+                String url = Constants.USERURL + "/" + userId + ".json";
+
+                resultAsyncTask = new HttpHandler().makeHttpGetRequest(url, TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
             }
