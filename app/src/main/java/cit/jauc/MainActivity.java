@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     userQuery.put("key", mAuth.getCurrentUser().getUid());
                     userQuery.put("email", mAuth.getCurrentUser().getEmail());
+                    userQuery.put("device", firebaseAppToken);
                     return convertJsonToUser(new HttpHandler().makeHttpPatchRequest(userQuery.toString(), Constants.USERURL + "/" + mAuth.getCurrentUser().getUid() + ".json", TAG), user[0]);
                 } catch (IOException e) {
                     e.printStackTrace();

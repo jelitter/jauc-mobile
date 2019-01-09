@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import cit.jauc.lib.HttpHandler;
 
 public class JAUCFirebaseMessageService extends FirebaseMessagingService {
 
