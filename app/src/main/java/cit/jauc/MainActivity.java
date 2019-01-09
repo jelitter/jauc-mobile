@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        if(sharedpreferences.getString("userId", "").equalsIgnoreCase("")) {
+        if(sharedpreferences.getString("userId", "").equalsIgnoreCase("") || !sharedpreferences.getString("userId", "").equalsIgnoreCase(mAuth.getCurrentUser().getUid())) {
             new GetUserDetails().execute(mAuth.getCurrentUser().getUid());
         }
     }
