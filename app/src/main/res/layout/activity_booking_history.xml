@@ -21,7 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_booking_history" />
+    <include layout="@layout/content_booking_history"  />
 
 <!--    This can be uncommented to allow a link to Contact customer support about Bookings
 
