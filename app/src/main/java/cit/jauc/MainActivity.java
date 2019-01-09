@@ -28,6 +28,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import cit.jauc.adapter.JAUCFirebaseMessageService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,11 +53,46 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
     SharedPreferences sharedpreferences;
+    String firebaseAppToken = "";
 
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        checkFirebaseMessageToken();
+    }
+
+    private void checkFirebaseMessageToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TOKENDEBUG", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        Log.d("TOKENDEBUG", "Token obtained");
+                        Log.d("TOKENDEBUG", token);
+
+                        if(!firebaseAppToken.equals(token)) {
+                            Log.d("TOKENDEBUG", "Received new Token");
+                            Log.d("TOKENDEBUG", token);
+                            Log.d("TOKENDEBUG", firebaseAppToken);
+
+                            try {
+                                JAUCFirebaseMessageService fbMessageService = new JAUCFirebaseMessageService();
+                                fbMessageService.sendTokenToFirebase(token);
+                            } catch (Error error) {
+                                error.printStackTrace();
+                            }
+
+                            firebaseAppToken = token;
+                        }
+                    }
+                });
     }
 
     @Override
