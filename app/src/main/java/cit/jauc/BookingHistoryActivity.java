@@ -43,6 +43,11 @@ public class BookingHistoryActivity extends AppCompatActivity {
     ListView listView;
     Context activity;
     String username;
+    StripeCustomer stripe;
+
+    public StripeCustomer getStripe() {
+        return stripe;
+    }
 
     @Override
     protected void onStart() {
@@ -73,10 +78,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_booking_list);
         username = getIntent().getStringExtra("User");
 
-        StripeCustomer stripe = (StripeCustomer) getIntent().getSerializableExtra("Stripe");
-        if (stripe != null) {
-// TODO - Pass payment info down the intents
-        }
+        stripe = (StripeCustomer) getIntent().getSerializableExtra("Stripe");
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +225,6 @@ public class BookingHistoryActivity extends AppCompatActivity {
             super.onProgressUpdate(values);
         }
     }
-
 }
 
 

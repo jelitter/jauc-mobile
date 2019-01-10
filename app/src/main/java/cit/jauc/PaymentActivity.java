@@ -27,6 +27,7 @@ import java.util.Locale;
 import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Invoice;
+import cit.jauc.model.StripeCustomer;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -41,6 +42,7 @@ public class PaymentActivity extends AppCompatActivity {
     String userId;
     String customerEmail;
     FirebaseAuth mAuth;
+    StripeCustomer stripe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class PaymentActivity extends AppCompatActivity {
         booking = (Booking) getIntent().getSerializableExtra("booking");
         userId = mAuth.getCurrentUser().getUid();
         customerEmail = mAuth.getCurrentUser().getEmail();
+        stripe = (StripeCustomer) getIntent().getSerializableExtra("stripe");
 
         txtInvoiceId = findViewById(R.id.txtPaymentInvoice);
         txtAmount = findViewById(R.id.txtPaymentAmount);
@@ -89,6 +92,9 @@ public class PaymentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), UserProfileActivity.class);
                 i.putExtra("User", userId);
+                if(stripe instanceof StripeCustomer) {
+                    i.putExtra("Stripe", stripe);
+                }
                 startActivity(i);
             }
         });

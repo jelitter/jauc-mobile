@@ -143,6 +143,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            progressDialog.dismiss();
             Toast.makeText(BookingDetailsActivity.this, "Rating saved.",
                     Toast.LENGTH_SHORT).show();
         }
