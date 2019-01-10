@@ -46,21 +46,14 @@ public class UserProfileActivity extends AppCompatActivity {
     LinearLayout lvStoredCard;
     ProgressDialog progDailog;
     FirebaseAuth mAuth;
+    StripeCustomer stripe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        StripeCustomer stripe = (StripeCustomer) getIntent().getSerializableExtra("Stripe");
-        if (stripe != null) {
-            last4 = (stripe.getLast4() != null) ? stripe.getLast4() : null;
-            if (last4 != null) {
-                txtLast4.setText(last4);
-                lvNewCard.setVisibility(LinearLayout.VISIBLE);
-                lvStoredCard.setVisibility(LinearLayout.GONE);
-            }
-        }
+
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
         username = (mAuth.getCurrentUser().getDisplayName() == null )? mAuth.getCurrentUser().getEmail(): mAuth.getCurrentUser().getDisplayName();
@@ -74,6 +67,17 @@ public class UserProfileActivity extends AppCompatActivity {
         txtLast4 = findViewById(R.id.txtStoredCard);
         lvNewCard = findViewById(R.id.lvNewCard);
         lvStoredCard = findViewById(R.id.lvStoredCard);
+
+
+        stripe = (StripeCustomer) getIntent().getSerializableExtra("Stripe");
+        if (stripe != null) {
+            last4 = (stripe.getLast4() != null) ? stripe.getLast4() : null;
+            if (last4 != null) {
+                txtLast4.setText(last4);
+                lvNewCard.setVisibility(LinearLayout.GONE);
+                lvStoredCard.setVisibility(LinearLayout.VISIBLE);
+            }
+        }
 
         btnAddNewCard.setOnClickListener(new View.OnClickListener() {
             @Override

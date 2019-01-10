@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         protected User doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-                String url = Constants.USERURL + "/" + userId + ".json";
+                String url = Constants.USERURL + "/" + mAuth.getCurrentUser().getUid() + ".json";
                 resultAsyncTask = new HttpHandler().makeHttpGetRequest(url, TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
