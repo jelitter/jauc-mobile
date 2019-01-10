@@ -1,8 +1,6 @@
 package cit.jauc;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,11 +27,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import cit.jauc.lib.HttpHandler;
+import cit.jauc.model.StripeCustomer;
 
 public class UserProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "UserProfileActivity";
-    Context activity;
     String username;
     TextView txtFullName;
     TextView txtLast4;
@@ -42,22 +40,33 @@ public class UserProfileActivity extends AppCompatActivity {
     CardInputWidget mCardInputWidget;
     String userEmail;
     String userId;
-    SharedPreferences sharedpreferences;
+    String last4;
+
     LinearLayout lvNewCard;
     LinearLayout lvStoredCard;
     ProgressDialog progDailog;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        sharedpreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
-        userId = sharedpreferences.getString("userId", getIntent().getStringExtra("userId"));
-        username = sharedpreferences.getString("userDisplayName", getIntent().getStringExtra("User"));
+        StripeCustomer stripe = (StripeCustomer) getIntent().getSerializableExtra("Stripe");
+        if (stripe != null) {
+            last4 = (stripe.getLast4() != null) ? stripe.getLast4() : null;
+            if (last4 != null) {
+                txtLast4.setText(last4);
+                lvNewCard.setVisibility(LinearLayout.VISIBLE);
+                lvStoredCard.setVisibility(LinearLayout.GONE);
+            }
+        }
+
+        userId = mAuth.getCurrentUser().getUid();
+        username = (mAuth.getCurrentUser().getDisplayName() == null )? mAuth.getCurrentUser().getEmail(): mAuth.getCurrentUser().getDisplayName();
         txtFullName = findViewById(R.id.txtProfileName);
         txtFullName.setText(username);
-        userEmail = sharedpreferences.getString("userDisplayName", "test@test.com");
+        userEmail = mAuth.getCurrentUser().getEmail();
 
         mCardInputWidget = findViewById(R.id.card_input_widget);
         btnAddCard = findViewById(R.id.btnAddPayment);
@@ -66,23 +75,12 @@ public class UserProfileActivity extends AppCompatActivity {
         lvNewCard = findViewById(R.id.lvNewCard);
         lvStoredCard = findViewById(R.id.lvStoredCard);
 
-        String last4 = sharedpreferences.getString("card", "");
-        txtLast4.setText(last4);
-
         btnAddNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 lvNewCard.setVisibility(LinearLayout.VISIBLE);
             }
         });
-
-        if(last4.equalsIgnoreCase("")) {
-            lvNewCard.setVisibility(LinearLayout.VISIBLE);
-            lvStoredCard.setVisibility(LinearLayout.GONE);
-        } else {
-            lvNewCard.setVisibility(LinearLayout.GONE);
-            lvStoredCard.setVisibility(LinearLayout.VISIBLE);
-        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -129,9 +127,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onSuccess(Source source) {
-                                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                                    editor.putString("card", cardToSave.getLast4());
-                                    editor.commit();
+                                    last4 =  cardToSave.getLast4();
                                     new StripeCustomerWorkflow().execute(userId, userEmail, source.getId());
                                 }
                             });
@@ -142,7 +138,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
     private class StripeCustomerWorkflow extends AsyncTask<String, Integer, String> {
-
 
         @Override
         protected void onPreExecute() {
@@ -177,12 +172,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
                 JSONObject query = new JSONObject();
                 query.put("customerToken", customerToken);
+                query.put("last4", last4);
                 resultAsyncTask = new HttpHandler().makeHttpPatchRequest(query.toString(), Constants.USERURL + "/" + userId + ".json", TAG);
             } catch (IOException e) {
                 e.printStackTrace();
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString("card", "");
-                editor.commit();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -197,12 +190,19 @@ public class UserProfileActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            txtLast4.setText(last4);
+            if(last4.equalsIgnoreCase("")) {
+                lvNewCard.setVisibility(LinearLayout.VISIBLE);
+                lvStoredCard.setVisibility(LinearLayout.GONE);
+            } else {
+                lvNewCard.setVisibility(LinearLayout.GONE);
+                lvStoredCard.setVisibility(LinearLayout.VISIBLE);
+            }
+
             Toast.makeText(UserProfileActivity.this, "Card saved.",
                     Toast.LENGTH_SHORT).show();
             progDailog.dismiss();
             lvNewCard.setVisibility(LinearLayout.GONE);
-            String last4 = sharedpreferences.getString("card", "");
-            txtLast4.setText(last4);
             lvStoredCard.setVisibility(LinearLayout.VISIBLE);
         }
 

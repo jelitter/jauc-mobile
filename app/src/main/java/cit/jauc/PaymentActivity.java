@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,7 +31,6 @@ import cit.jauc.model.Invoice;
 public class PaymentActivity extends AppCompatActivity {
 
     private final String TAG = "PaymentActivity";
-    SharedPreferences sharedpreferences;
     Button btnPayNewCard;
     Button btnPayStoredCard;
     TextView txtInvoiceId;
@@ -39,6 +40,7 @@ public class PaymentActivity extends AppCompatActivity {
     Booking booking;
     String userId;
     String customerEmail;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +48,12 @@ public class PaymentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        sharedpreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
 
         invoice = (Invoice) getIntent().getSerializableExtra("invoice");
         booking = (Booking) getIntent().getSerializableExtra("booking");
-        userId = sharedpreferences.getString("userId", booking.getUserId());
-        customerEmail = sharedpreferences.getString("userEmail", "group.project@gmail.com");
+        userId = mAuth.getCurrentUser().getUid();
+        customerEmail = mAuth.getCurrentUser().getEmail();
 
         txtInvoiceId = findViewById(R.id.txtPaymentInvoice);
         txtAmount = findViewById(R.id.txtPaymentAmount);
