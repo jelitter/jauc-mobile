@@ -2,9 +2,9 @@
 <resources>
     <color name="colorPrimary">#79CCCD</color>
     <color name="colorPrimaryDark">#80CBC4</color>
-    <color name="colorAccent">#007B76</color>
-    <color name="mapboxGreen">#007B76</color>
-    <color name="surface">#E0F2F1</color>
+    <color name="colorPrimaryDarker">#006050</color>
+    <color name="colorAccent">#007b76</color>
+    <color name="mapBoxGreen">#007B76</color>
+    <color name="colorSurface">#E0F2F1</color>
     <color name="stdButton">#004F48</color>
-
 </resources>

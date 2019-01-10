@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".PaymentActivity"
+    android:padding="20dp"
     tools:showIn="@layout/activity_payment"
-    android:background="@color/surface">
+    android:background="@drawable/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,14 +71,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Pay Using Stored Card" />
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_background"
+                android:textColor="@color/colorSurface"
+                android:text="Use Stored Card" />
 
             <Button
                 android:id="@+id/btnPayNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Pay Using New Card" />
+                android:background="@drawable/button_background"
+                android:textColor="@color/colorSurface"
+                android:text="Use New Card" />
         </LinearLayout>
 
 

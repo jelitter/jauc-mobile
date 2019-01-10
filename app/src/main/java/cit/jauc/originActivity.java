@@ -139,7 +139,7 @@ public class originActivity extends AppCompatActivity implements
 
             LocationComponentOptions options = LocationComponentOptions.builder(this)
                     .trackingGesturesManagement(true)
-                    .accuracyColor(ContextCompat.getColor(this, R.color.mapboxGreen))
+                    .accuracyColor(ContextCompat.getColor(this, R.color.mapBoxGreen))
                     .build();
 
             // Get an instance of the component
