@@ -121,7 +121,7 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:textColor="@color/colorPrimaryDarker"
                 android:textSize="24dp"
-                android:textStyle="italic" />
+                 />
         </LinearLayout>
 
 

@@ -123,8 +123,17 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivity( new Intent(getBaseContext(), SupportHistoryActivity.class));
+            public void onClick(View v) {
+                Bundle extras = new Bundle();
+                extras.putString("userId",mAuth.getCurrentUser().getUid());
+                extras.putString("displayName",mAuth.getCurrentUser().getDisplayName());
+                extras.putString("email",mAuth.getCurrentUser().getEmail());
+                extras.putString("photoUrl", mAuth.getCurrentUser().getPhotoUrl().toString());
+
+                Intent intentSupport = new Intent(getBaseContext(), SupportHistoryActivity.class);
+                intentSupport.putExtras(extras);
+
+                startActivity(intentSupport);
             }
         });
 
