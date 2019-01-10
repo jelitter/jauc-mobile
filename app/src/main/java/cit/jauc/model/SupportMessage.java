@@ -7,6 +7,7 @@ public class SupportMessage implements Serializable {
 
     private String id;
     private String body;
+    private String response;
     private Date date;
     private String email;
     private String photoUrl;
@@ -17,6 +18,7 @@ public class SupportMessage implements Serializable {
 
     public SupportMessage() {
         this.setBody("");
+        this.setResponse(null);
         this.setDate(new Date());
         this.setEmail("");
         this.setPhotoUrl("");
@@ -40,6 +42,14 @@ public class SupportMessage implements Serializable {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
     }
 
     public Date getDate() {
