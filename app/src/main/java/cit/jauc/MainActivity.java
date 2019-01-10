@@ -50,18 +50,12 @@ public class MainActivity extends AppCompatActivity {
     Button btnSupportMain;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
-    String userId, displayName, email, photoUrl;
     User loadedUserInfo;
 
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-
-        userId = mAuth.getCurrentUser().getUid();
-        displayName = mAuth.getCurrentUser().getDisplayName();
-        email = mAuth.getCurrentUser().getEmail();
-        photoUrl = mAuth.getCurrentUser().getPhotoUrl().toString();
     }
 
     @Override
