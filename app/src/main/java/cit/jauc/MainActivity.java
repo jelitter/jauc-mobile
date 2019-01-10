@@ -28,6 +28,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import cit.jauc.adapter.JAUCFirebaseMessageService;
+
 import com.stripe.android.Stripe;
 
 import org.json.JSONException;
@@ -50,12 +55,57 @@ public class MainActivity extends AppCompatActivity {
     Button btnSupportMain;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
+    SharedPreferences sharedpreferences;
+    String firebaseAppToken = "";
+
+    String userId, displayName, email, photoUrl;
+
     User loadedUserInfo;
 
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        checkFirebaseMessageToken();
+    }
+
+    private void checkFirebaseMessageToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TOKENDEBUG", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        Log.d("TOKENDEBUG", "Token obtained");
+                        Log.d("TOKENDEBUG", token);
+
+                        if(!firebaseAppToken.equals(token)) {
+                            Log.d("TOKENDEBUG", "Received new Token");
+                            Log.d("TOKENDEBUG", token);
+                            Log.d("TOKENDEBUG", firebaseAppToken);
+
+                            try {
+                                JAUCFirebaseMessageService fbMessageService = new JAUCFirebaseMessageService();
+                                fbMessageService.sendTokenToFirebase(token);
+                            } catch (Error error) {
+                                error.printStackTrace();
+                            }
+
+                            firebaseAppToken = token;
+                        }
+                    }
+                });
+
+        userId = mAuth.getCurrentUser().getUid();
+        displayName = mAuth.getCurrentUser().getDisplayName();
+        email = mAuth.getCurrentUser().getEmail();
+        photoUrl = mAuth.getCurrentUser().getPhotoUrl().toString();
+
     }
 
     @Override
@@ -212,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     userQuery.put("key", mAuth.getCurrentUser().getUid());
                     userQuery.put("email", mAuth.getCurrentUser().getEmail());
+                    userQuery.put("device", firebaseAppToken);
                     return convertJsonToUser(new HttpHandler().makeHttpPatchRequest(userQuery.toString(), Constants.USERURL + "/" + mAuth.getCurrentUser().getUid() + ".json", TAG), user[0]);
                 } catch (IOException e) {
                     e.printStackTrace();
