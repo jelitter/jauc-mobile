@@ -28,9 +28,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import cit.jauc.adapter.JAUCFirebaseMessageService;
+
+import com.stripe.android.Stripe;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     String firebaseAppToken = "";
 
     String userId, displayName, email, photoUrl;
-
+    User loadedUserInfo;
 
     @Override
     protected void onStart() {
@@ -109,19 +112,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        sharedpreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
-            FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity( new Intent(getBaseContext(), SupportHistoryActivity.class));
             }
         });
 
@@ -145,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), UserProfileActivity.class);
                 i.putExtra("User", mAuth.getCurrentUser().getUid());
+                if(loadedUserInfo instanceof StripeCustomer) {
+                    i.putExtra("Stripe", loadedUserInfo);
+                }
                 startActivity(i);
             }
         });
@@ -154,6 +158,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), BookingHistoryActivity.class);
                 i.putExtra("User", mAuth.getCurrentUser().getUid());
+                if(loadedUserInfo instanceof StripeCustomer) {
+                    i.putExtra("Stripe", loadedUserInfo);
+                }
                 startActivity(i);
             }
         });
@@ -161,11 +168,9 @@ public class MainActivity extends AppCompatActivity {
         btnBook.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                     Intent intentBook = new Intent(getBaseContext(), originActivity.class);
                     intentBook.putExtra("User", mAuth.getCurrentUser().getUid());
                     startActivity(intentBook);
-
             }
         });
 
@@ -194,9 +199,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        if(sharedpreferences.getString("userId", "").equalsIgnoreCase("") || !sharedpreferences.getString("userId", "").equalsIgnoreCase(mAuth.getCurrentUser().getUid())) {
-            new GetUserDetails().execute(mAuth.getCurrentUser().getUid());
-        }
+        new GetUserDetails().execute(mAuth.getCurrentUser().getUid());
     }
 
     private void sendToLogin() { //funtion
@@ -238,10 +241,7 @@ public class MainActivity extends AppCompatActivity {
         protected User doInBackground(String... user) {
             String resultAsyncTask = "";
             try {
-//                resultAsyncTask = new HttpHandler().makeHttpGetRequest(Constants.USERURL + "/" + user[0] + ".json", TAG);
-
                 String url = Constants.USERURL + "/" + userId + ".json";
-
                 resultAsyncTask = new HttpHandler().makeHttpGetRequest(url, TAG);
             } catch (IOException e) {
                 Log.w(TAG, "closingInputStream:failure", e);
@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                             if (data.has("customerToken")) {
                                 result = new StripeCustomer();
                                 ((StripeCustomer) result).setCustomerToken(data.getString("customerToken"));
+                                ((StripeCustomer) result).setLast4(data.getString("last4"));
                             }
                             result.setKey(userId);
                             result.setPhotoUrl(data.getString("photoUrl"));
@@ -296,17 +297,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(User user) {
             super.onPostExecute(user);
-
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            if (user instanceof StripeCustomer) {
-                String cusToken = ((StripeCustomer) user).getCustomerToken();
-                editor.putString("stripeCustomer", cusToken);
-            }
-            editor.putString("userId", user.getKey());
-            editor.putString("userEmail", user.getEmail());
-            editor.putString("userDisplayName", user.getDisplayName());
-            editor.putString("userPhotoUrl", user.getPhotoUrl());
-            editor.commit();
+            loadedUserInfo = user;
             progressDialog.dismiss();
         }
 

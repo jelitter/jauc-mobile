@@ -165,6 +165,9 @@ public class SupportHistoryActivity extends AppCompatActivity {
                             String body = (element.has("body")) ? element.getString("body") : null;
                             message.setBody(body);
 
+                            String response = (element.has("response")) ? element.getString("response") : null;
+                            message.setResponse(response);
+
                             String email = (element.has("email")) ? element.getString("email") : null;
                             message.setEmail(email);
 

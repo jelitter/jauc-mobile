@@ -213,6 +213,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Rating rating) {
             super.onPostExecute(rating);
+            progressDialog.dismiss();
 
             if (rating != null && rating.getBookingID() != null) {
                 btnRatingAngry.setEnabled(false);
@@ -233,8 +234,6 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 btnRatingAngry.setEnabled(true);
                 btnRatingHappy.setEnabled(true);
             }
-
-            progressDialog.dismiss();
         }
 
         @Override

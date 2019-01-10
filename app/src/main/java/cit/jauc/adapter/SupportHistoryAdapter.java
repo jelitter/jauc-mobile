@@ -1,11 +1,14 @@
 package cit.jauc.adapter;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +40,11 @@ public class SupportHistoryAdapter extends ArrayAdapter<SupportMessage> {
         TextView tvDate = convertView.findViewById(R.id.tvDate);
         TextView tvBody = convertView.findViewById(R.id.tvBody);
 
+        TextView tvTitleResponse = convertView.findViewById(R.id.tvTitleResponse);
+        TextView tvEmailResponse = convertView.findViewById(R.id.tvEmailResponse);
+        TextView tvDateResponse = convertView.findViewById(R.id.tvDateResponse);
+        TextView tvBodyResponse = convertView.findViewById(R.id.tvBodyResponse);
+
         btnRespond = convertView.findViewById(R.id.btnRespond);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
@@ -44,6 +52,24 @@ public class SupportHistoryAdapter extends ArrayAdapter<SupportMessage> {
         tvEmail.setText("<" + message.getEmail() + ">");
         tvDate.setText(df.format(message.getDate()));
         tvBody.setText(message.getBody());
+
+
+        LinearLayout responseLayout = convertView.findViewById(R.id.layoutResponse);
+
+        String response = message.getResponse();
+        if (response == null) {
+            responseLayout.setVisibility(LinearLayout.GONE);
+        } else {
+            tvTitleResponse.setText("JAUC Support");
+//            tvBodyResponse.setText(response);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                tvBodyResponse.setText(Html.fromHtml(response, Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                tvBodyResponse.setText(Html.fromHtml(response));
+            }
+        }
+
 
         btnRespond.setOnClickListener(new View.OnClickListener() {
             @Override

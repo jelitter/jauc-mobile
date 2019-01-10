@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.json.JSONException;
@@ -32,6 +33,7 @@ import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Car;
 import cit.jauc.model.Invoice;
+import cit.jauc.model.StripeCustomer;
 
 public class BookingHistoryActivity extends AppCompatActivity {
 
@@ -70,6 +72,11 @@ public class BookingHistoryActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.lv_booking_list);
         username = getIntent().getStringExtra("User");
+
+        StripeCustomer stripe = (StripeCustomer) getIntent().getSerializableExtra("Stripe");
+        if (stripe != null) {
+// TODO - Pass payment info down the intents
+        }
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
