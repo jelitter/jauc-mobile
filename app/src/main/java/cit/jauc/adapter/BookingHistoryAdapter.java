@@ -13,18 +13,22 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import cit.jauc.BookingHistoryActivity;
 import cit.jauc.PaymentActivity;
 import cit.jauc.R;
 import cit.jauc.model.Booking;
+import cit.jauc.model.StripeCustomer;
 
 public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
 
     Booking booking;
     Button btnPay;
     TextView tvPaid;
+    StripeCustomer stripe;
 
     public BookingHistoryAdapter(Context context, List<Booking> bookings) {
         super(context, 0, bookings);
+         stripe = ((BookingHistoryActivity) context).getStripe();
     }
 
     @Override
@@ -53,13 +57,17 @@ public class BookingHistoryAdapter extends ArrayAdapter<Booking> {
                 Intent i = new Intent(getContext(), PaymentActivity.class);
                 i.putExtra("booking", booking);
                 i.putExtra("invoice", booking.getInvoice());
+                if(stripe != null) {
+                    i.putExtra("stripe", stripe);
+                }
                 v.getContext().startActivity(i);
             }
         });
 
         if (booking.getInvoice().getId() == null) {
             btnPay.setVisibility(Button.GONE);
-            tvPaid.setVisibility(TextView.GONE);
+            tvPaid.setText("Booking not yet approved");
+            tvPaid.setVisibility(TextView.VISIBLE);
         }
         if(booking.getInvoice().isPaid()) {
             btnPay.setVisibility(Button.GONE);

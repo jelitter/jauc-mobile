@@ -61,7 +61,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 lvStoredCard.setVisibility(LinearLayout.GONE);
             }
         }
-
+        mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
         username = (mAuth.getCurrentUser().getDisplayName() == null )? mAuth.getCurrentUser().getEmail(): mAuth.getCurrentUser().getDisplayName();
         txtFullName = findViewById(R.id.txtProfileName);
