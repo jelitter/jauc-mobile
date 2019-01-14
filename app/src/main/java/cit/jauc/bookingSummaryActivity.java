@@ -3,8 +3,6 @@ package cit.jauc;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 
 import org.json.JSONException;
@@ -30,12 +27,7 @@ import cit.jauc.lib.HttpHandler;
 import cit.jauc.model.Booking;
 import cit.jauc.model.Location;
 
-import java.util.List;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -45,18 +37,12 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import android.util.Log;
-// classes needed to launch navigation UI
-import android.view.View;
-import android.widget.Button;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
@@ -112,6 +98,7 @@ public class bookingSummaryActivity extends AppCompatActivity implements OnMapRe
         btnCancel = findViewById(R.id.bt_cancel);
         btnConfirm = findViewById(R.id.bt_confirm);
 
+        // Get the putExtra data from the destinationActivity
         receiveIntent = getIntent();
         destinationAddress = receiveIntent.getStringExtra("destinationAddress");
         destinationLat = receiveIntent.getDoubleExtra("destinationLat",0);
@@ -155,12 +142,14 @@ public class bookingSummaryActivity extends AppCompatActivity implements OnMapRe
     public void onMapReady(MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
 
+        // Add the origin marker
         mapboxMap.addMarker(new MarkerOptions()
                 .position(new LatLng(originLat, originLon))
                 .title("Origin")
                 .snippet(originAddress)
         );
 
+        // Add the destination marker
         mapboxMap.addMarker(new MarkerOptions()
                 .position(new LatLng(destinationLat, destinationLon))
                 .title("Destination")
@@ -171,12 +160,12 @@ public class bookingSummaryActivity extends AppCompatActivity implements OnMapRe
         LatLng originLatLng = new LatLng(originLat, originLon);
         LatLng destinationLatLang = new LatLng(destinationLat, destinationLon);
 
+        // Set the bounds of the camera with the origin and destination point
         LatLngBounds latLngBounds = new LatLngBounds.Builder()
                 .include(originLatLng)
                 .include(destinationLatLang)
                 .build();
-
-        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 20));
+        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 50));
 
     }
 
@@ -199,7 +188,7 @@ public class bookingSummaryActivity extends AppCompatActivity implements OnMapRe
                         }
                         currentRoute = response.body().routes().get(0);
 
-// Draw the route on the map
+                        // Draw the route on the map
                         if (navigationMapRoute != null) {
                             navigationMapRoute.removeRoute();
                         } else {
