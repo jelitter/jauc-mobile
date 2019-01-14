@@ -55,6 +55,22 @@
           }
         },
         {
+          "client_id": "491744035196-tpkg0qetc3j1vqkupi8oaimrqsu3e0ht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cit.jauc",
+            "certificate_hash": "492111f0a4583ddbe9e5445e2ec55ac9d2e6363a"
+          }
+        },
+        {
+          "client_id": "491744035196-1eb70ikde86iaong8ssg7pldulv8lt6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cit.jauc",
+            "certificate_hash": "80daec69e0f58998ade380a0352df55a53635cbd"
+          }
+        },
+        {
           "client_id": "491744035196-3tvo0r4d05b1mq7m16s9597f7tsceggf.apps.googleusercontent.com",
           "client_type": 3
         }
