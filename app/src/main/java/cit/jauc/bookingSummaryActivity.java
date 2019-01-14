@@ -7,11 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.mapbox.android.core.permissions.PermissionsManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,10 +49,8 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 public class bookingSummaryActivity extends AppCompatActivity implements OnMapReadyCallback {
     private Intent receiveIntent;
 
-    private TextView tvDestinationAddress;
     private String destinationAddress;
     private String originAddress;
-    private TextView tvOriginAddress;
 
     private Button btnCancel;
     private Button btnConfirm;
@@ -72,13 +68,10 @@ public class bookingSummaryActivity extends AppCompatActivity implements OnMapRe
     private FirebaseAuth mAuth;
     private String currentUser;
 
-    private PermissionsManager permissionsManager;
     private MapView mapView;
     private MapboxMap mapboxMap;
     private DirectionsRoute currentRoute;
     private NavigationMapRoute navigationMapRoute;
-    private Point originRoutePoint;
-    private Point destinationRoutePoint;
 
 
     private static final String TAG = "bookingSummaryActivity";
@@ -155,7 +148,7 @@ public class bookingSummaryActivity extends AppCompatActivity implements OnMapRe
                 .title("Destination")
                 .snippet(destinationAddress)
         );
-        getRoute(originRoutePoint.fromLngLat(originLon, originLat), destinationRoutePoint.fromLngLat(destinationLon, destinationLat));
+        getRoute(Point.fromLngLat(originLon, originLat), Point.fromLngLat(destinationLon, destinationLat));
 
         LatLng originLatLng = new LatLng(originLat, originLon);
         LatLng destinationLatLang = new LatLng(destinationLat, destinationLon);
@@ -309,6 +302,4 @@ public class bookingSummaryActivity extends AppCompatActivity implements OnMapRe
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
-
 }
