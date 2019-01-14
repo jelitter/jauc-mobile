@@ -27,6 +27,7 @@ android {
 
 repositories {
     mavenCentral()
+    maven { url 'https://mapbox.bintray.com/mapbox' }
 }
 
 dependencies {
@@ -56,6 +57,8 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.6.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places:0.6.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.26.0'
+
     // Stripe payment
     implementation 'com.stripe:stripe-android:6.1.2'
     // Firebase Messages Notifications
